@@ -114,8 +114,8 @@ class _RutasRecomendadasWidgetState extends State<RutasRecomendadasWidget> {
                     mapController: _mapController,
                     options: MapOptions(
                       center: mainPosition,
-                      minZoom: 9,
-                      maxZoom: 21,
+                      minZoom: 3,
+                      maxZoom: 30,
                       zoom: 18,
                     ),
                     nonRotatedChildren: [
