@@ -15,7 +15,7 @@ const MAPBOX_ACCESS_TOKEN =
 const MAPBOX_STYLE = 'mapbox/streets-v12';
 const MARKER_COLOR = Color(0xFF023047);
 
-final mainPosition = latlong.LatLng(4.683488, -74.042486);
+/*final mainPosition = latlong.LatLng(4.683488, -74.042486);*/
 
 class RutasRecomendadasWidget extends StatefulWidget {
   const RutasRecomendadasWidget({Key? key}) : super(key: key);
@@ -26,11 +26,12 @@ class RutasRecomendadasWidget extends StatefulWidget {
 }
 
 class _RutasRecomendadasWidgetState extends State<RutasRecomendadasWidget> {
+  late latlong.LatLng mainPosition = latlong.LatLng(4.683488, -74.042486);
   late RutasRecomendadasModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  /*Future<Position> determinePosition() async {
+  Future<Position> determinePosition() async {
     LocationPermission permission;
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
@@ -44,14 +45,20 @@ class _RutasRecomendadasWidgetState extends State<RutasRecomendadasWidget> {
 
   void getCurrentLocation() async {
     Position position = await determinePosition();
-    print(position.latitude);
-    print(position.longitude);
-  }*/
+    setState(() {
+      mainPosition = latlong.LatLng(position.latitude, position.longitude);
+      if (_mapController != null) {
+        _mapController.move(mainPosition, 18.0);
+      }
+    });
+  }
 
   @override
   void initState() {
+    getCurrentLocation();
     super.initState();
     _model = createModel(context, () => RutasRecomendadasModel());
+    _mapController = MapController();
   }
 
   @override
@@ -60,6 +67,8 @@ class _RutasRecomendadasWidgetState extends State<RutasRecomendadasWidget> {
 
     super.dispose();
   }
+
+  late MapController _mapController;
 
   @override
   Widget build(BuildContext context) {
@@ -102,11 +111,12 @@ class _RutasRecomendadasWidgetState extends State<RutasRecomendadasWidget> {
               child: Stack(
                 children: [
                   FlutterMap(
+                    mapController: _mapController,
                     options: MapOptions(
                       center: mainPosition,
-                      minZoom: 5,
-                      maxZoom: 16,
-                      zoom: 13,
+                      minZoom: 9,
+                      maxZoom: 21,
+                      zoom: 18,
                     ),
                     nonRotatedChildren: [
                       TileLayer(
