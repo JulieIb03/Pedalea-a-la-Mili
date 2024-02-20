@@ -1,6 +1,4 @@
-import 'package:pedalea_a_la_mili/rutas/ruta_centro.dart';
 import 'package:pedalea_a_la_mili/rutas/ruta_occidente.dart';
-import 'package:pedalea_a_la_mili/rutas_recomendadas/rutas_recomendadas_widget.dart';
 
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -920,7 +918,7 @@ class _UnirseaRuta1WidgetState extends State<UnirseaRuta1Widget> {
                                   Align(
                                     alignment: AlignmentDirectional(0.00, 0.00),
                                     child: FaIcon(
-                                      FontAwesomeIcons.userAlt,
+                                      FontAwesomeIcons.userLarge,
                                       color: FlutterFlowTheme.of(context)
                                           .secondary,
                                       size: 32.0,
