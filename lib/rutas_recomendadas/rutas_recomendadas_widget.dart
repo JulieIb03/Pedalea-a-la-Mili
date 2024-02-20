@@ -1,3 +1,5 @@
+import 'package:pedalea_a_la_mili/index.dart';
+
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'dart:ui';
@@ -220,47 +222,19 @@ class _RutasRecomendadasWidgetState extends State<RutasRecomendadasWidget> {
                                       context.pushNamed('UnirseaRuta');
                                     },
                                     child: Container(
-                                      width: 100.0,
-                                      height: 70.0,
-                                      decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryBtnText,
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                      child: Stack(
-                                        children: [
-                                          Align(
-                                            alignment: AlignmentDirectional(
-                                                -0.50, -0.85),
-                                            child: Text(
-                                              '1',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Poppins',
-                                                        fontSize: 21.0,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                            ),
-                                          ),
-                                          Align(
-                                            alignment: AlignmentDirectional(
-                                                0.25, 0.75),
-                                            child: Text(
-                                              'Ruta\nOccidente',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Poppins',
-                                                        fontSize: 12.0,
-                                                      ),
-                                            ),
-                                          ),
-                                        ],
+                                      child: Align(
+                                        alignment:
+                                            AlignmentDirectional(0.00, 0.00),
+                                        child: PageView(
+                                          children: [
+                                            _buildButton(1, 'Ruta \n Occidente',
+                                                context),
+                                            _buildButton(
+                                                2, 'Ruta \n Centro', context),
+                                            _buildButton(
+                                                3, 'Ruta \n Norte', context),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -282,61 +256,6 @@ class _RutasRecomendadasWidgetState extends State<RutasRecomendadasWidget> {
                                     ),
                                   ),
                                 ),
-
-                                /*CREA AQUI EL MENU DESPLEGABLE*/
-
-                                /*Align(
-                                  alignment: AlignmentDirectional(0.00, 0.60),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(0.0),
-                                    child: BackdropFilter(
-                                      filter: ImageFilter.blur(
-                                        sigmaX: 10.0,
-                                        sigmaY: 10.0,
-                                      ),
-                                      child: Container(
-                                        width: 350.0,
-                                        height: 150.0,
-                                        decoration: BoxDecoration(
-                                          color: Color(0x15FFFFFF),
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: AlignmentDirectional(0.00, -0.50),
-                                  child: Container(
-                                    width: 350.0,
-                                    height: 40.0,
-                                    decoration: BoxDecoration(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondary,
-                                      borderRadius: BorderRadius.only(
-                                        bottomLeft: Radius.circular(0.0),
-                                        bottomRight: Radius.circular(0.0),
-                                        topLeft: Radius.circular(20.0),
-                                        topRight: Radius.circular(20.0),
-                                      ),
-                                    ),
-                                    child: Align(
-                                      alignment:
-                                          AlignmentDirectional(0.00, 0.00),
-                                      child: PageView(
-                                        children: [
-                                          _buildButton(
-                                              1, 'Ruta \n Occidente', context),
-                                          _buildButton(
-                                              2, 'Ruta \n Centro', context),
-                                          _buildButton(
-                                              3, 'Ruta \n Norte', context),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),*/
                               ],
                             ),
                           ),
@@ -393,7 +312,14 @@ class _RutasRecomendadasWidgetState extends State<RutasRecomendadasWidget> {
   }
 }
 
+class SelectedRoute {
+  late final int num;
+
+  SelectedRoute(this.num);
+}
+
 Widget _buildButton(int number, String text, BuildContext context) {
+  int selectedRoute = 1;
   return Align(
     alignment: AlignmentDirectional(0.00, 0.50),
     child: InkWell(
@@ -405,13 +331,14 @@ Widget _buildButton(int number, String text, BuildContext context) {
         // Maneja el tap del botón aquí
         switch (number) {
           case 1:
-            // context.pushNamed('UnirseaRuta');
+            print('ruta1');
+            context.pushNamed('UnirseaRuta1');
             break;
           case 2:
-            // context.pushNamed('UnirseaRuta');
+            print('ruta2');
             break;
           case 3:
-            // context.pushNamed('UnirseaRuta');
+            print('ruta3');
             break;
         }
       },
