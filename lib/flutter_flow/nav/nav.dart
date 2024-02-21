@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:pedalea_a_la_mili/rutas_recomendadas/rutas_recomendadas_widget.dart';
 import 'package:pedalea_a_la_mili/unirsea_ruta/unirsea_ruta1_widget.dart';
 import 'package:pedalea_a_la_mili/unirsea_ruta/unirsea_ruta2_widget.dart';
 import 'package:pedalea_a_la_mili/unirsea_ruta/unirsea_ruta3_widget.dart';
@@ -16,9 +15,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 export 'package:go_router/go_router.dart';
 export 'serialization_util.dart';
 
-import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
-import 'package:flutter/material.dart';
 
 const kTransitionInfoKey = '__transition_info__';
 

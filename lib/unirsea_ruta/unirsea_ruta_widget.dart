@@ -48,9 +48,7 @@ class _UnirseaRutaWidgetState extends State<UnirseaRutaWidget> {
       mainPosition = latlong.LatLng(position.latitude, position.longitude);
       mainPositionCenter =
           latlong.LatLng(position.latitude - 0.003, position.longitude);
-      if (_mapController != null) {
-        _mapController.move(mainPositionCenter, 12.0);
-      }
+      _mapController.move(mainPositionCenter, 12.0);
     });
   }
 
@@ -762,7 +760,7 @@ class _UnirseaRutaWidgetState extends State<UnirseaRutaWidget> {
                                   Align(
                                     alignment: AlignmentDirectional(0.00, 0.00),
                                     child: FaIcon(
-                                      FontAwesomeIcons.userAlt,
+                                      FontAwesomeIcons.userLarge,
                                       color: FlutterFlowTheme.of(context)
                                           .secondary,
                                       size: 32.0,

@@ -531,7 +531,7 @@ class _YaenRutaWidgetState extends State<YaenRutaWidget> {
                                   Align(
                                     alignment: AlignmentDirectional(0.00, 0.00),
                                     child: FaIcon(
-                                      FontAwesomeIcons.userAlt,
+                                      FontAwesomeIcons.userLarge,
                                       color: FlutterFlowTheme.of(context)
                                           .secondary,
                                       size: 32.0,

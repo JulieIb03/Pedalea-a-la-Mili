@@ -1,4 +1,3 @@
-import 'package:pedalea_a_la_mili/index.dart';
 
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -59,9 +58,7 @@ class _RutasRecomendadasWidgetState extends State<RutasRecomendadasWidget> {
     Position position = await determinePosition();
     setState(() {
       mainPosition = latlong.LatLng(position.latitude, position.longitude);
-      if (_mapController != null) {
-        _mapController.move(mainPosition, 18.0);
-      }
+      _mapController.move(mainPosition, 18.0);
     });
   }
 
@@ -299,7 +296,7 @@ class _RutasRecomendadasWidgetState extends State<RutasRecomendadasWidget> {
                                 Align(
                                   alignment: AlignmentDirectional(0.00, 0.00),
                                   child: FaIcon(
-                                    FontAwesomeIcons.userAlt,
+                                    FontAwesomeIcons.userLarge,
                                     color:
                                         FlutterFlowTheme.of(context).secondary,
                                     size: 32.0,
