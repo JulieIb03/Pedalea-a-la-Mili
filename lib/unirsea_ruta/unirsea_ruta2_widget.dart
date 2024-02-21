@@ -1,4 +1,3 @@
-import 'package:pedalea_a_la_mili/rutas/ruta_centro.dart';
 import 'package:pedalea_a_la_mili/rutas/ruta_norte.dart';
 import 'package:pedalea_a_la_mili/rutas_recomendadas/rutas_recomendadas_widget.dart';
 
@@ -24,12 +23,18 @@ const MAPBOX_STYLE = 'mapbox/streets-v12';
 const MARKER_COLOR = Color(0xFF023047);
 const LINE_COLOR = Color(0xFF1DAEEF);
 
+// Configurar la imagen, ancho y alto predeterminados
+const MARKER_SIZE_EXPANDED = 30.0;
+const MARKER_SIZE_SHRINKED = 18.0;
+
 class UnirseaRuta2Widget extends StatefulWidget {
   @override
   _UnirseaRuta2WidgetState createState() => _UnirseaRuta2WidgetState();
 }
 
 class _UnirseaRuta2WidgetState extends State<UnirseaRuta2Widget> {
+  int? selectedRadioValue;
+  int _selectedIndex = 0;
   final GlobalKey<ScaffoldState> scaffoldKey;
 
   _UnirseaRuta2WidgetState() : scaffoldKey = GlobalKey<ScaffoldState>();
@@ -52,18 +57,23 @@ class _UnirseaRuta2WidgetState extends State<UnirseaRuta2Widget> {
       // Agregar marcador
       _markerList.add(
         Marker(
-          height: 18,
-          width: 18,
+          height: MARKER_SIZE_EXPANDED,
+          width: MARKER_SIZE_EXPANDED,
           point: mapItem.location,
           builder: (_) {
             return GestureDetector(
               onTap: () {
-                _pageController.animateToPage(i,
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeInOut);
-                print('Selected_ ${mapItem.adress}');
+                _selectedIndex = i;
+                setState(() {
+                  _pageController.animateToPage(i,
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeInOut);
+                  print('Selected_ ${mapItem.adress}');
+                });
               },
-              child: Image.asset('assets/images/Marker.png'),
+              child: _LocationMarker(
+                selected: _selectedIndex == i,
+              ),
             );
           },
         ),
@@ -113,18 +123,6 @@ class _UnirseaRuta2WidgetState extends State<UnirseaRuta2Widget> {
     return await Geolocator.getCurrentPosition();
   }
 
-  /*void getCurrentLocation() async {
-    Position position = await determinePosition();
-    setState(() {
-      mainPosition = latlong.LatLng(position.latitude, position.longitude);
-      mainPositionCenter =
-          latlong.LatLng(position.latitude - 0.003, position.longitude);
-      if (_mapController != null) {
-        _mapController.move(mainPositionCenter, 12.0);
-      }
-    });
-  }*/
-
   void getCurrentLocation() async {
     Position position = await determinePosition();
     setState(() {
@@ -142,6 +140,7 @@ class _UnirseaRuta2WidgetState extends State<UnirseaRuta2Widget> {
     getCurrentLocation();
     startLocationUpdates();
     super.initState();
+    selectedRadioValue = 0;
     _model = createModel(context, () => UnirseaRuta2Model());
     _mapController = MapController();
   }
@@ -390,27 +389,6 @@ class _UnirseaRuta2WidgetState extends State<UnirseaRuta2Widget> {
                                                         ),
                                               ),
                                             ),
-                                            Align(
-                                              alignment: AlignmentDirectional(
-                                                  0.90, 0.50),
-                                              child: Text(
-                                                'Punto Sugerido',
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily: 'Eras',
-                                                          color:
-                                                              Color(0xFF1DAEEF),
-                                                          fontSize: 12.0,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          fontStyle:
-                                                              FontStyle.italic,
-                                                          useGoogleFonts: false,
-                                                        ),
-                                              ),
-                                            ),
                                           ],
                                         ),
                                       ),
@@ -505,207 +483,162 @@ class _UnirseaRuta2WidgetState extends State<UnirseaRuta2Widget> {
                                                 children: [
                                                   Theme(
                                                     data: ThemeData(
-                                                      checkboxTheme:
-                                                          CheckboxThemeData(
+                                                      radioTheme:
+                                                          RadioThemeData(
                                                         visualDensity:
                                                             VisualDensity
                                                                 .compact,
                                                         materialTapTargetSize:
                                                             MaterialTapTargetSize
                                                                 .shrinkWrap,
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      4.0),
-                                                        ),
                                                       ),
                                                       unselectedWidgetColor:
                                                           FlutterFlowTheme.of(
                                                                   context)
                                                               .secondary,
                                                     ),
-                                                    child: Checkbox(
-                                                      value: _model
-                                                              .checkboxValue1 ??=
-                                                          false,
-                                                      onChanged:
-                                                          (newValue) async {
-                                                        setState(() => _model
-                                                                .checkboxValue1 =
-                                                            newValue!);
+                                                    child: Radio(
+                                                      value:
+                                                          1, // Valor único para esta opción
+                                                      groupValue: _model
+                                                          .selectedRadioValue, // Valor seleccionado actual
+                                                      onChanged: (value) {
+                                                        setState(() {
+                                                          _model.selectedRadioValue =
+                                                              value
+                                                                  as int; // Actualiza el valor seleccionado
+                                                        });
                                                       },
                                                       activeColor:
                                                           Color(0xFF1DAEEF),
-                                                      checkColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondary,
                                                     ),
                                                   ),
                                                   Theme(
                                                     data: ThemeData(
-                                                      checkboxTheme:
-                                                          CheckboxThemeData(
+                                                      radioTheme:
+                                                          RadioThemeData(
                                                         visualDensity:
                                                             VisualDensity
                                                                 .compact,
                                                         materialTapTargetSize:
                                                             MaterialTapTargetSize
                                                                 .shrinkWrap,
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      4.0),
-                                                        ),
                                                       ),
                                                       unselectedWidgetColor:
                                                           FlutterFlowTheme.of(
                                                                   context)
                                                               .secondary,
                                                     ),
-                                                    child: Checkbox(
-                                                      value: _model
-                                                              .checkboxValue2 ??=
-                                                          false,
-                                                      onChanged:
-                                                          (newValue) async {
-                                                        setState(() => _model
-                                                                .checkboxValue2 =
-                                                            newValue!);
+                                                    child: Radio(
+                                                      value:
+                                                          2, // Valor único para esta opción
+                                                      groupValue: _model
+                                                          .selectedRadioValue, // Valor seleccionado actual
+                                                      onChanged: (value) {
+                                                        setState(() {
+                                                          _model.selectedRadioValue =
+                                                              value
+                                                                  as int; // Actualiza el valor seleccionado
+                                                        });
                                                       },
                                                       activeColor:
                                                           Color(0xFF1DAEEF),
-                                                      checkColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondary,
                                                     ),
                                                   ),
                                                   Theme(
                                                     data: ThemeData(
-                                                      checkboxTheme:
-                                                          CheckboxThemeData(
+                                                      radioTheme:
+                                                          RadioThemeData(
                                                         visualDensity:
                                                             VisualDensity
                                                                 .compact,
                                                         materialTapTargetSize:
                                                             MaterialTapTargetSize
                                                                 .shrinkWrap,
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      4.0),
-                                                        ),
                                                       ),
                                                       unselectedWidgetColor:
                                                           FlutterFlowTheme.of(
                                                                   context)
                                                               .secondary,
                                                     ),
-                                                    child: Checkbox(
-                                                      value: _model
-                                                              .checkboxValue3 ??=
-                                                          true,
-                                                      onChanged:
-                                                          (newValue) async {
-                                                        setState(() => _model
-                                                                .checkboxValue3 =
-                                                            newValue!);
+                                                    child: Radio(
+                                                      value:
+                                                          3, // Valor único para esta opción
+                                                      groupValue: _model
+                                                          .selectedRadioValue, // Valor seleccionado actual
+                                                      onChanged: (value) {
+                                                        setState(() {
+                                                          _model.selectedRadioValue =
+                                                              value
+                                                                  as int; // Actualiza el valor seleccionado
+                                                        });
                                                       },
                                                       activeColor:
                                                           Color(0xFF1DAEEF),
-                                                      checkColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondary,
                                                     ),
                                                   ),
                                                   Theme(
                                                     data: ThemeData(
-                                                      checkboxTheme:
-                                                          CheckboxThemeData(
+                                                      radioTheme:
+                                                          RadioThemeData(
                                                         visualDensity:
                                                             VisualDensity
                                                                 .compact,
                                                         materialTapTargetSize:
                                                             MaterialTapTargetSize
                                                                 .shrinkWrap,
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      4.0),
-                                                        ),
                                                       ),
                                                       unselectedWidgetColor:
                                                           FlutterFlowTheme.of(
                                                                   context)
                                                               .secondary,
                                                     ),
-                                                    child: Checkbox(
-                                                      value: _model
-                                                              .checkboxValue4 ??=
-                                                          false,
-                                                      onChanged:
-                                                          (newValue) async {
-                                                        setState(() => _model
-                                                                .checkboxValue4 =
-                                                            newValue!);
+                                                    child: Radio(
+                                                      value:
+                                                          4, // Valor único para esta opción
+                                                      groupValue: _model
+                                                          .selectedRadioValue, // Valor seleccionado actual
+                                                      onChanged: (value) {
+                                                        setState(() {
+                                                          _model.selectedRadioValue =
+                                                              value
+                                                                  as int; // Actualiza el valor seleccionado
+                                                        });
                                                       },
                                                       activeColor:
                                                           Color(0xFF1DAEEF),
-                                                      checkColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondary,
                                                     ),
                                                   ),
                                                   Theme(
                                                     data: ThemeData(
-                                                      checkboxTheme:
-                                                          CheckboxThemeData(
+                                                      radioTheme:
+                                                          RadioThemeData(
                                                         visualDensity:
                                                             VisualDensity
                                                                 .compact,
                                                         materialTapTargetSize:
                                                             MaterialTapTargetSize
                                                                 .shrinkWrap,
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      4.0),
-                                                        ),
                                                       ),
                                                       unselectedWidgetColor:
                                                           FlutterFlowTheme.of(
                                                                   context)
                                                               .secondary,
                                                     ),
-                                                    child: Checkbox(
-                                                      value: _model
-                                                              .checkboxValue5 ??=
-                                                          false,
-                                                      onChanged:
-                                                          (newValue) async {
-                                                        setState(() => _model
-                                                                .checkboxValue5 =
-                                                            newValue!);
+                                                    child: Radio(
+                                                      value:
+                                                          5, // Valor único para esta opción
+                                                      groupValue: _model
+                                                          .selectedRadioValue, // Valor seleccionado actual
+                                                      onChanged: (value) {
+                                                        setState(() {
+                                                          _model.selectedRadioValue =
+                                                              value
+                                                                  as int; // Actualiza el valor seleccionado
+                                                        });
                                                       },
                                                       activeColor:
                                                           Color(0xFF1DAEEF),
-                                                      checkColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondary,
                                                     ),
                                                   ),
                                                 ],
@@ -786,16 +719,19 @@ class _UnirseaRuta2WidgetState extends State<UnirseaRuta2Widget> {
                                                                 0.0, 0.0),
                                                     child: Text(
                                                       'Cra 9 con Cl 153 - 6:25 am',
-                                                      style: FlutterFlowTheme
-                                                              .of(context)
-                                                          .bodyMedium
-                                                          .override(
-                                                            fontFamily: 'Eras',
-                                                            color: Color(
-                                                                0xFF1DAEEF),
-                                                            useGoogleFonts:
-                                                                false,
-                                                          ),
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Eras',
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .secondary,
+                                                                useGoogleFonts:
+                                                                    false,
+                                                              ),
                                                     ),
                                                   ),
                                                 ),
@@ -928,6 +864,25 @@ class _UnirseaRuta2WidgetState extends State<UnirseaRuta2Widget> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _LocationMarker extends StatelessWidget {
+  const _LocationMarker({Key? key, this.selected = false}) : super(key: key);
+
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    final size = selected ? MARKER_SIZE_EXPANDED : MARKER_SIZE_SHRINKED;
+    return Center(
+      child: AnimatedContainer(
+        height: size,
+        width: size,
+        duration: Duration(milliseconds: 400),
+        child: Image.asset('assets/images/Marker.png'),
       ),
     );
   }

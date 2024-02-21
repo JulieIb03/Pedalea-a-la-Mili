@@ -1,4 +1,3 @@
-
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'dart:ui';
@@ -33,20 +32,20 @@ class _RutasRecomendadasWidgetState extends State<RutasRecomendadasWidget> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  void solicitarPermisosSMS() async {
+  /*void solicitarPermisosSMS() async {
     var status = await Permission.sms.status;
     if (status != PermissionStatus.granted) {
       status = await Permission.sms.request();
       if (status != PermissionStatus.granted) {}
     }
-  }
+  }*/
 
   Future<Position> determinePosition() async {
     LocationPermission permission;
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
-      solicitarPermisosSMS();
+      //solicitarPermisosSMS();
       if (permission == LocationPermission.denied) {
         return Future.error('error');
       }
@@ -205,7 +204,7 @@ class _RutasRecomendadasWidgetState extends State<RutasRecomendadasWidget> {
                                       alignment:
                                           AlignmentDirectional(0.00, 0.00),
                                       child: Text(
-                                        'Rutas Recomendadas',
+                                        'Rutas Activas',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -232,14 +231,19 @@ class _RutasRecomendadasWidgetState extends State<RutasRecomendadasWidget> {
                                       child: Align(
                                         alignment:
                                             AlignmentDirectional(0.00, 0.00),
-                                        child: PageView(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             _buildButton(1, 'Ruta \n Occidente',
                                                 Color(0xFFFFB600), context),
-                                            _buildButton(2, 'Ruta \n Centro',
+                                            SizedBox(width: 9),
+                                            _buildButton(2, 'Ruta \n Norte',
                                                 Color(0xFF1DAEEF), context),
-                                            _buildButton(3, 'Ruta \n Norte',
+                                            SizedBox(width: 9),
+                                            _buildButton(3, 'Ruta \n Centro',
                                                 Color(0xFF552E87), context),
+                                            SizedBox(width: 9),
                                           ],
                                         ),
                                       ),
@@ -341,15 +345,15 @@ Widget _buildButton(
         switch (number) {
           case 1:
             print('ruta1');
-            context.pushNamed('UnirseaRuta1');
+            context.pushNamed('IniciarRuta1');
             break;
           case 2:
             print('ruta2');
-            context.pushNamed('UnirseaRuta2');
+            context.pushNamed('IniciarRuta2');
             break;
           case 3:
             print('ruta3');
-            context.pushNamed('UnirseaRuta3');
+            context.pushNamed('IniciarRuta3');
             break;
         }
       },
@@ -380,7 +384,7 @@ Widget _buildButton(
               ),
             ),
             Align(
-              alignment: AlignmentDirectional(0, 0.75),
+              alignment: AlignmentDirectional(-0.3, 0.75),
               child: Text(
                 text,
                 style: FlutterFlowTheme.of(context).bodyMedium.override(

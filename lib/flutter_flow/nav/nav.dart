@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:pedalea_a_la_mili/iniciar_ruta/iniciar_ruta1_widget.dart';
+import 'package:pedalea_a_la_mili/iniciar_ruta/iniciar_ruta2_widget.dart';
+import 'package:pedalea_a_la_mili/iniciar_ruta/iniciar_ruta3_widget.dart';
 import 'package:pedalea_a_la_mili/unirsea_ruta/unirsea_ruta1_widget.dart';
 import 'package:pedalea_a_la_mili/unirsea_ruta/unirsea_ruta2_widget.dart';
 import 'package:pedalea_a_la_mili/unirsea_ruta/unirsea_ruta3_widget.dart';
@@ -79,11 +82,26 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'iniciarRuta',
               builder: (context, params) => IniciarRutaWidget(),
             ),
-            /*FFRoute(
+            FFRoute(
+              name: 'IniciarRuta1',
+              path: 'iniciarRuta1',
+              builder: (context, params) => IniciarRuta1Widget(),
+            ),
+            FFRoute(
+              name: 'IniciarRuta2',
+              path: 'iniciarRuta2',
+              builder: (context, params) => IniciarRuta2Widget(),
+            ),
+            FFRoute(
+              name: 'IniciarRuta3',
+              path: 'iniciarRuta3',
+              builder: (context, params) => IniciarRuta3Widget(),
+            ),
+            FFRoute(
               name: 'UnirseaRuta',
               path: 'unirseaRuta',
               builder: (context, params) => UnirseaRutaWidget(),
-            ),*/
+            ),
             FFRoute(
               name: 'UnirseaRuta1',
               path: 'unirseaRuta1',

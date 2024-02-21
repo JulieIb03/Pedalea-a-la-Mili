@@ -171,31 +171,10 @@ class _YaenRuta3WidgetState extends State<YaenRuta3Widget> {
 
     if (direccion != null) {
       final String mensajeConUbicacion =
-          '$mensaje\nMi dirección aproximada es: $direccion';
+          '$mensaje\nMi dirección aproximada es: $direccion\nhttps://www.google.com/maps?q=$latitud,$longitud';
 
-      /*String _result =
-          await sendSMS(message: mensajeConUbicacion, recipients: numero)
-              .catchError((onError) {
-        print(onError);
-      });
-      print(_result);*/
-
-      final Uri uri = Uri.parse('smsto:+57$numero?body=$mensajeConUbicacion');
       final Uri uriwsp =
           Uri.parse('https://wa.me/$numero?text=$mensajeConUbicacion');
-
-      // Extraer el valor del parámetro 'body' de la URI
-      String body = uri.queryParameters['body'] ??
-          ""; // Usar un valor predeterminado si es nulo
-
-      // Imprimir solo el valor del parámetro 'body' en la consola
-      print("$body");
-
-      if (await canLaunch(uri.toString())) {
-        await launch(uri.toString());
-      } else {
-        print('No se pudo lanzar el mensaje de texto.');
-      }
 
       if (await canLaunch(uriwsp.toString())) {
         await launch(uriwsp.toString());

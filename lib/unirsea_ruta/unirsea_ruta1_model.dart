@@ -6,6 +6,9 @@ class UnirseaRuta1Model extends FlutterFlowModel<UnirseaRuta1Widget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
+
+  int? selectedRadioValue;
+
   // State field(s) for Checkbox widget.
   bool? checkboxValue1;
   // State field(s) for Checkbox widget.

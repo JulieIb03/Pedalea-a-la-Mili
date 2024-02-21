@@ -1,4 +1,4 @@
-/*import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_util.dart';
 import 'unirsea_ruta_widget.dart' show UnirseaRutaWidget;
 import 'package:flutter/material.dart';
 
@@ -28,4 +28,4 @@ class UnirseaRutaModel extends FlutterFlowModel<UnirseaRutaWidget> {
   /// Action blocks are added here.
 
   /// Additional helper methods are added here.
-}*/
+}
