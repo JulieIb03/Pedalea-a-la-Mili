@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:pedalea_a_la_mili/iniciar_ruta_lider/iniciar_ruta_lider1_widget.dart';
+import 'package:pedalea_a_la_mili/iniciar_ruta_lider/iniciar_ruta_lider2_widget.dart';
+import 'package:pedalea_a_la_mili/iniciar_ruta_lider/iniciar_ruta_lider3_widget.dart';
 import 'package:pedalea_a_la_mili/iniciar_ruta/iniciar_ruta1_widget.dart';
 import 'package:pedalea_a_la_mili/iniciar_ruta/iniciar_ruta2_widget.dart';
 import 'package:pedalea_a_la_mili/iniciar_ruta/iniciar_ruta3_widget.dart';
@@ -71,6 +74,21 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'Registro2',
               path: 'registro2',
               builder: (context, params) => Registro2Widget(),
+            ),
+            FFRoute(
+              name: 'IniciarRuta1Lider',
+              path: 'iniciarRuta1Lider',
+              builder: (context, params) => IniciarRuta1LiderWidget(),
+            ),
+            FFRoute(
+              name: 'IniciarRuta2Lider',
+              path: 'iniciarRuta2Lider',
+              builder: (context, params) => IniciarRuta2LiderWidget(),
+            ),
+            FFRoute(
+              name: 'IniciarRuta3Lider',
+              path: 'iniciarRuta3Lider',
+              builder: (context, params) => IniciarRuta3LiderWidget(),
             ),
             FFRoute(
               name: 'RutasRecomendadas',
