@@ -1,4 +1,3 @@
-import 'package:pedalea_a_la_mili/rutas/ruta_centro.dart';
 import 'package:pedalea_a_la_mili/rutas/ruta_occidente.dart';
 import 'package:pedalea_a_la_mili/rutas_recomendadas/rutas_recomendadas_widget.dart';
 
@@ -15,8 +14,8 @@ import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 /*import 'package:location/location.dart';*/
 
-import 'unirsea_ruta_model.dart';
-export 'unirsea_ruta_model.dart';
+import 'unirsea_ruta1_model.dart';
+export 'unirsea_ruta1_model.dart';
 
 const MAPBOX_ACCESS_TOKEN =
     'sk.eyJ1Ijoia2Vyb3JlcyIsImEiOiJjbHJndzFxdmkwbG5nMnBxbW80eGZibml0In0.y3yPkMenroJ7DaWvNP2QcA';
@@ -38,7 +37,7 @@ class _UnirseaRuta1WidgetState extends State<UnirseaRuta1Widget> {
 
   late latlong.LatLng mainPosition = latlong.LatLng(4.683488, -74.042486);
   late latlong.LatLng mainPositionCenter = latlong.LatLng(4.683488, -74.042486);
-  late UnirseaRutaModel _model;
+  late UnirseaRuta1Model _model;
 
   late Timer locationTimer;
 
@@ -142,7 +141,7 @@ class _UnirseaRuta1WidgetState extends State<UnirseaRuta1Widget> {
     getCurrentLocation();
     startLocationUpdates();
     super.initState();
-    _model = createModel(context, () => UnirseaRutaModel());
+    _model = createModel(context, () => UnirseaRuta1Model());
     _mapController = MapController();
   }
 
@@ -857,7 +856,7 @@ class _UnirseaRuta1WidgetState extends State<UnirseaRuta1Widget> {
                                     alignment: AlignmentDirectional(0.00, 0.87),
                                     child: FFButtonWidget(
                                       onPressed: () async {
-                                        context.pushNamed('YaenRuta');
+                                        context.pushNamed('YaenRuta1');
                                       },
                                       text: 'Aceptar',
                                       options: FFButtonOptions(

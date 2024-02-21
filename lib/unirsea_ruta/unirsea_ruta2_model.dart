@@ -1,8 +1,8 @@
-/*import '/flutter_flow/flutter_flow_util.dart';
-import 'unirsea_ruta_widget.dart' show UnirseaRutaWidget;
+import '/flutter_flow/flutter_flow_util.dart';
+import 'unirsea_ruta2_widget.dart' show UnirseaRuta2Widget;
 import 'package:flutter/material.dart';
 
-class UnirseaRutaModel extends FlutterFlowModel<UnirseaRutaWidget> {
+class UnirseaRuta2Model extends FlutterFlowModel<UnirseaRuta2Widget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
@@ -28,4 +28,4 @@ class UnirseaRutaModel extends FlutterFlowModel<UnirseaRutaWidget> {
   /// Action blocks are added here.
 
   /// Additional helper methods are added here.
-}*/
+}

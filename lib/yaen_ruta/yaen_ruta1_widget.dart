@@ -1,4 +1,6 @@
-/*import 'package:pedalea_a_la_mili/rutas_recomendadas/rutas_recomendadas_widget.dart';
+import 'dart:ffi';
+import 'package:pedalea_a_la_mili/rutas/ruta_occidente.dart';
+import 'package:pedalea_a_la_mili/rutas_recomendadas/rutas_recomendadas_widget.dart';
 
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -6,29 +8,102 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart' as latlong;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'unirsea_ruta_model.dart';
-export 'unirsea_ruta_model.dart';
+import 'dart:async';
+import 'dart:convert';
+
+import 'yaen_ruta1_model.dart';
+export 'yaen_ruta1_model.dart';
 
 const MAPBOX_ACCESS_TOKEN =
     'sk.eyJ1Ijoia2Vyb3JlcyIsImEiOiJjbHJndzFxdmkwbG5nMnBxbW80eGZibml0In0.y3yPkMenroJ7DaWvNP2QcA';
 const MAPBOX_STYLE = 'mapbox/streets-v12';
 const MARKER_COLOR = Color(0xFF023047);
+const LINE_COLOR = Color(0xFFFFB600);
 
-class UnirseaRutaWidget extends StatefulWidget {
+class YaenRuta1Widget extends StatefulWidget {
+  const YaenRuta1Widget({Key? key}) : super(key: key);
+
   @override
-  _UnirseaRutaWidgetState createState() => _UnirseaRutaWidgetState();
+  _YaenRuta1WidgetState createState() => _YaenRuta1WidgetState();
 }
 
-class _UnirseaRutaWidgetState extends State<UnirseaRutaWidget> {
+class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
+  final GlobalKey<ScaffoldState> scaffoldKey;
+
+  _YaenRuta1WidgetState() : scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final _pageController = PageController();
+
   late latlong.LatLng mainPosition = latlong.LatLng(4.683488, -74.042486);
   late latlong.LatLng mainPositionCenter = latlong.LatLng(4.683488, -74.042486);
-  late UnirseaRutaModel _model;
+  late YaenRuta1Model _model;
 
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  late Timer locationTimer;
+
+  List<Marker> _buildMarkers() {
+    final _markerList = <Marker>[];
+    final _polylinePoints = <latlong.LatLng>[];
+
+    for (int i = 0; i < mapMarkersR1.length; i++) {
+      final mapItem = mapMarkersR1[i];
+
+      // Agregar marcador
+      _markerList.add(
+        Marker(
+          height: 18,
+          width: 18,
+          point: mapItem.location,
+          builder: (_) {
+            return GestureDetector(
+              onTap: () {
+                _pageController.animateToPage(i,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut);
+                print('Selected_ ${mapItem.adress}');
+              },
+              child: Image.asset('assets/images/Marker.png'),
+            );
+          },
+        ),
+      );
+
+      // Agregar punto al polyline
+      _polylinePoints.add(mapItem.location);
+    }
+
+    // Crear polyline
+    final polyline = Polyline(
+      points: _polylinePoints,
+      color: LINE_COLOR,
+      strokeWidth: 2.0,
+    );
+
+    return _markerList;
+  }
+
+  List<Polyline> _buildPolylines() {
+    final _polylinePoints = <latlong.LatLng>[];
+
+    for (int i = 0; i < mapMarkersR1.length; i++) {
+      final mapItem = mapMarkersR1[i];
+      _polylinePoints.add(mapItem.location);
+    }
+
+    // Crear polyline
+    final polyline = Polyline(
+      points: _polylinePoints,
+      color: LINE_COLOR,
+      strokeWidth: 6.0,
+    );
+
+    return [polyline];
+  }
 
   Future<Position> determinePosition() async {
     LocationPermission permission;
@@ -48,24 +123,208 @@ class _UnirseaRutaWidgetState extends State<UnirseaRutaWidget> {
       mainPosition = latlong.LatLng(position.latitude, position.longitude);
       mainPositionCenter =
           latlong.LatLng(position.latitude - 0.003, position.longitude);
-      if (_mapController != null) {
+      /*if (_mapController != null) {
         _mapController.move(mainPositionCenter, 12.0);
-      }
+      }*/
     });
+  }
+
+  // Función para obtener la dirección
+  Future<String?> obtenerDireccion(double latitud, double longitud) async {
+    final String apiUrl =
+        'https://api.mapbox.com/geocoding/v5/mapbox.places/$longitud,$latitud.json?access_token=$MAPBOX_ACCESS_TOKEN';
+
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+
+        if (responseData.containsKey('features') &&
+            responseData['features'] is List &&
+            (responseData['features'] as List).isNotEmpty) {
+          final List<dynamic> featuresList = responseData['features'] as List;
+
+          if (featuresList[0] is Map<String, dynamic>) {
+            // Retornar el valor de la dirección
+            return featuresList[0]['place_name'] as String;
+          }
+        }
+      }
+    } catch (e) {
+      print('Error al realizar la solicitud: $e');
+    }
+
+    // Si hubo un error o no se encontró la dirección, retornar null
+    return null;
+  }
+
+  List<String> destinatario = ["3154149719"];
+
+  void enviarMensaje(List<String> numero, String mensaje) async {
+    final double latitud = mainPosition!.latitude;
+    final double longitud = mainPosition!.longitude;
+
+    final String? direccion = await obtenerDireccion(latitud, longitud);
+
+    if (direccion != null) {
+      final String mensajeConUbicacion =
+          '$mensaje\nMi dirección aproximada es: $direccion';
+
+      /*String _result =
+          await sendSMS(message: mensajeConUbicacion, recipients: numero)
+              .catchError((onError) {
+        print(onError);
+      });
+      print(_result);*/
+
+      final Uri uri = Uri.parse('smsto:+57$numero?body=$mensajeConUbicacion');
+      final Uri uriwsp =
+          Uri.parse('https://wa.me/$numero?text=$mensajeConUbicacion');
+
+      // Extraer el valor del parámetro 'body' de la URI
+      String body = uri.queryParameters['body'] ??
+          ""; // Usar un valor predeterminado si es nulo
+
+      // Imprimir solo el valor del parámetro 'body' en la consola
+      print("$body");
+
+      if (await canLaunch(uri.toString())) {
+        await launch(uri.toString());
+      } else {
+        print('No se pudo lanzar el mensaje de texto.');
+      }
+
+      if (await canLaunch(uriwsp.toString())) {
+        await launch(uriwsp.toString());
+      } else {
+        print('No se pudo abrir Whatsapp.');
+      }
+    }
+  }
+
+  void _mostrarDialogo(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+                27.0), // Radio de borde del cuadro de diálogo
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ConstrainedBox(
+                constraints: BoxConstraints.tightFor(
+                    width: 120.0), // Ancho fijo del botón
+                child: ElevatedButton(
+                  onPressed: () {
+                    enviarMensaje(destinatario,
+                        'Necesito ayuda, mi bicicleta tuvo un daño.');
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF023047), // Fondo del botón
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          12.0), // Radio de borde del botón
+                    ),
+                  ),
+                  child: Text(
+                    'Daño',
+                    style: TextStyle(
+                      fontFamily: 'Eras',
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 8.0), // Espacio entre botones
+              ConstrainedBox(
+                constraints: BoxConstraints.tightFor(
+                    width: 120.0), // Ancho fijo del botón
+                child: ElevatedButton(
+                  onPressed: () {
+                    enviarMensaje(
+                        destinatario, 'Me acaban de robar la bicicleta.');
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF023047), // Fondo del botón
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          12.0), // Radio de borde del botón
+                    ),
+                  ),
+                  child: Text(
+                    'Robo',
+                    style: TextStyle(
+                      fontFamily: 'Eras',
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 8.0), // Espacio entre botones
+              ConstrainedBox(
+                constraints: BoxConstraints.tightFor(
+                    width: 120.0), // Ancho fijo del botón
+                child: ElevatedButton(
+                  onPressed: () {
+                    enviarMensaje(destinatario,
+                        '¡Emergencia! He tenido un accidente en mi bicicleta.');
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF023047), // Fondo del botón
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          12.0), // Radio de borde del botón
+                    ),
+                  ),
+                  child: Text(
+                    'Accidente',
+                    style: TextStyle(
+                      fontFamily: 'Eras',
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
   void initState() {
     getCurrentLocation();
+    startLocationUpdates();
     super.initState();
-    _model = createModel(context, () => UnirseaRutaModel());
+    _model = createModel(context, () => YaenRuta1Model());
     _mapController = MapController();
+  }
+
+  void startLocationUpdates() {
+    locationTimer = Timer.periodic(Duration(seconds: 2), (Timer timer) {
+      getCurrentLocation();
+    });
+  }
+
+  void stopLocationUpdates() {
+    locationTimer.cancel();
   }
 
   @override
   void dispose() {
+    stopLocationUpdates();
     _model.dispose();
-
     super.dispose();
   }
 
@@ -73,27 +332,7 @@ class _UnirseaRutaWidgetState extends State<UnirseaRutaWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final selectedCase = ModalRoute.of(context)?.settings.arguments as int?;
-
-    // Verifica si selectedCase no es nulo antes de usarlo
-    if (selectedCase != null) {
-      // Haz algo con selectedCase
-      switch (selectedCase) {
-        case 1:
-          print('Seleccionaste la ruta: $selectedCase');
-          // Cargar datos desde case1.dart
-          break;
-        case 2:
-          print('Seleccionaste la ruta: $selectedCase');
-          // Cargar datos desde case2.dart
-          break;
-        case 3:
-          print('Seleccionaste la ruta: $selectedCase');
-          // Cargar datos desde case3.dart
-          break;
-        // Agrega más casos según sea necesario
-      }
-    }
+    final _markers = _buildMarkers();
 
     if (isiOS) {
       SystemChrome.setSystemUIOverlayStyle(
@@ -139,7 +378,7 @@ class _UnirseaRutaWidgetState extends State<UnirseaRutaWidget> {
                     FlutterMap(
                       mapController: _mapController,
                       options: MapOptions(
-                        center: mainPosition,
+                        center: mainPositionCenter,
                         minZoom: 3,
                         maxZoom: 30,
                         zoom: 12,
@@ -159,6 +398,10 @@ class _UnirseaRutaWidgetState extends State<UnirseaRutaWidget> {
                             'id': MAPBOX_STYLE,
                           },
                         ),
+                        PolylineLayer(polylines: _buildPolylines()),
+                        MarkerLayer(
+                          markers: _markers,
+                        ),
                         MarkerLayer(
                           markers: [
                             Marker(
@@ -176,6 +419,24 @@ class _UnirseaRutaWidgetState extends State<UnirseaRutaWidget> {
                           ],
                         )
                       ],
+                    ),
+                    //PageView Paradas
+                    Positioned(
+                      left: 190,
+                      right: 24,
+                      top: 21,
+                      height: MediaQuery.of(context).size.height * 0.07,
+                      child: PageView.builder(
+                        controller: _pageController,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: mapMarkersR1.length,
+                        itemBuilder: (context, index) {
+                          final item = mapMarkersR1[index];
+                          return _MapItemDetails(
+                            mapMarkerR1: item,
+                          );
+                        },
+                      ),
                     ),
                     Align(
                       alignment: AlignmentDirectional(0.00, 0.00),
@@ -196,8 +457,8 @@ class _UnirseaRutaWidgetState extends State<UnirseaRutaWidget> {
                                       borderRadius: BorderRadius.circular(0.0),
                                       child: BackdropFilter(
                                         filter: ImageFilter.blur(
-                                          sigmaX: 10.0,
-                                          sigmaY: 10.0,
+                                          sigmaX: 9.0,
+                                          sigmaY: 9.0,
                                         ),
                                         child: Align(
                                           alignment:
@@ -206,7 +467,7 @@ class _UnirseaRutaWidgetState extends State<UnirseaRutaWidget> {
                                             width: 350.0,
                                             height: 358.0,
                                             decoration: BoxDecoration(
-                                              color: Color(0x15FFFFFF),
+                                              color: Color(0x5DFFFFFF),
                                               borderRadius:
                                                   BorderRadius.circular(20.0),
                                             ),
@@ -244,78 +505,6 @@ class _UnirseaRutaWidgetState extends State<UnirseaRutaWidget> {
                                                 fontStyle: FontStyle.italic,
                                                 useGoogleFonts: false,
                                               ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment:
-                                        AlignmentDirectional(0.00, -0.40),
-                                    child: Container(
-                                      width: 268.0,
-                                      height: 37.0,
-                                      decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryBtnText,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            blurRadius: 12.0,
-                                            color: Color(0x63023047),
-                                            offset: Offset(4.0, 7.0),
-                                          )
-                                        ],
-                                        borderRadius:
-                                            BorderRadius.circular(12.0),
-                                      ),
-                                      alignment:
-                                          AlignmentDirectional(0.00, 0.00),
-                                      child: Align(
-                                        alignment:
-                                            AlignmentDirectional(0.00, 0.00),
-                                        child: Stack(
-                                          children: [
-                                            Align(
-                                              alignment: AlignmentDirectional(
-                                                  -0.80, 0.00),
-                                              child: Text(
-                                                'Seleccionar Punto',
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily: 'Eras',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .secondary,
-                                                          fontSize: 18.0,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          useGoogleFonts: false,
-                                                        ),
-                                              ),
-                                            ),
-                                            Align(
-                                              alignment: AlignmentDirectional(
-                                                  0.90, 0.50),
-                                              child: Text(
-                                                'Punto Sugerido',
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily: 'Eras',
-                                                          color:
-                                                              Color(0xFFFB8500),
-                                                          fontSize: 12.0,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          fontStyle:
-                                                              FontStyle.italic,
-                                                          useGoogleFonts: false,
-                                                        ),
-                                              ),
-                                            ),
-                                          ],
                                         ),
                                       ),
                                     ),
@@ -387,7 +576,8 @@ class _UnirseaRutaWidgetState extends State<UnirseaRutaWidget> {
                                     ),
                                   ),
                                   Align(
-                                    alignment: AlignmentDirectional(0.00, 0.30),
+                                    alignment:
+                                        AlignmentDirectional(0.00, -0.25),
                                     child: Container(
                                       width: 313.0,
                                       height: 130.0,
@@ -407,177 +597,88 @@ class _UnirseaRutaWidgetState extends State<UnirseaRutaWidget> {
                                                   0.00, -1.00),
                                               child: Column(
                                                 mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
                                                 children: [
-                                                  Theme(
-                                                    data: ThemeData(
-                                                      checkboxTheme:
-                                                          CheckboxThemeData(
-                                                        visualDensity:
-                                                            VisualDensity
-                                                                .compact,
-                                                        materialTapTargetSize:
-                                                            MaterialTapTargetSize
-                                                                .shrinkWrap,
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      4.0),
-                                                        ),
+                                                  Align(
+                                                    alignment:
+                                                        AlignmentDirectional(
+                                                            0.00, -1.00),
+                                                    child: Container(
+                                                      width: 15.0,
+                                                      height: 15.0,
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondary,
+                                                        shape: BoxShape.circle,
                                                       ),
-                                                      unselectedWidgetColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondary,
-                                                    ),
-                                                    child: Checkbox(
-                                                      value: _model
-                                                              .checkboxValue1 ??=
-                                                          false,
-                                                      onChanged:
-                                                          (newValue) async {
-                                                        setState(() => _model
-                                                                .checkboxValue1 =
-                                                            newValue!);
-                                                      },
-                                                      activeColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primary,
-                                                      checkColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondary,
                                                     ),
                                                   ),
-                                                  Theme(
-                                                    data: ThemeData(
-                                                      checkboxTheme:
-                                                          CheckboxThemeData(
-                                                        visualDensity:
-                                                            VisualDensity
-                                                                .compact,
-                                                        materialTapTargetSize:
-                                                            MaterialTapTargetSize
-                                                                .shrinkWrap,
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      4.0),
-                                                        ),
+                                                  Align(
+                                                    alignment:
+                                                        AlignmentDirectional(
+                                                            0.00, -1.00),
+                                                    child: Container(
+                                                      width: 15.0,
+                                                      height: 15.0,
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondary,
+                                                        shape: BoxShape.circle,
                                                       ),
-                                                      unselectedWidgetColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondary,
-                                                    ),
-                                                    child: Checkbox(
-                                                      value: _model
-                                                              .checkboxValue2 ??=
-                                                          false,
-                                                      onChanged:
-                                                          (newValue) async {
-                                                        setState(() => _model
-                                                                .checkboxValue2 =
-                                                            newValue!);
-                                                      },
-                                                      activeColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primary,
-                                                      checkColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondary,
                                                     ),
                                                   ),
-                                                  Theme(
-                                                    data: ThemeData(
-                                                      checkboxTheme:
-                                                          CheckboxThemeData(
-                                                        visualDensity:
-                                                            VisualDensity
-                                                                .compact,
-                                                        materialTapTargetSize:
-                                                            MaterialTapTargetSize
-                                                                .shrinkWrap,
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      4.0),
-                                                        ),
+                                                  Align(
+                                                    alignment:
+                                                        AlignmentDirectional(
+                                                            0.00, -1.00),
+                                                    child: Container(
+                                                      width: 15.0,
+                                                      height: 15.0,
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondary,
+                                                        shape: BoxShape.circle,
                                                       ),
-                                                      unselectedWidgetColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondary,
-                                                    ),
-                                                    child: Checkbox(
-                                                      value: _model
-                                                              .checkboxValue3 ??=
-                                                          true,
-                                                      onChanged:
-                                                          (newValue) async {
-                                                        setState(() => _model
-                                                                .checkboxValue3 =
-                                                            newValue!);
-                                                      },
-                                                      activeColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primary,
-                                                      checkColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondary,
                                                     ),
                                                   ),
-                                                  Theme(
-                                                    data: ThemeData(
-                                                      checkboxTheme:
-                                                          CheckboxThemeData(
-                                                        visualDensity:
-                                                            VisualDensity
-                                                                .compact,
-                                                        materialTapTargetSize:
-                                                            MaterialTapTargetSize
-                                                                .shrinkWrap,
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      4.0),
-                                                        ),
+                                                  Align(
+                                                    alignment:
+                                                        AlignmentDirectional(
+                                                            0.00, -1.00),
+                                                    child: Container(
+                                                      width: 15.0,
+                                                      height: 15.0,
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondary,
+                                                        shape: BoxShape.circle,
                                                       ),
-                                                      unselectedWidgetColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondary,
                                                     ),
-                                                    child: Checkbox(
-                                                      value: _model
-                                                              .checkboxValue4 ??=
-                                                          false,
-                                                      onChanged:
-                                                          (newValue) async {
-                                                        setState(() => _model
-                                                                .checkboxValue4 =
-                                                            newValue!);
-                                                      },
-                                                      activeColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primary,
-                                                      checkColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondary,
+                                                  ),
+                                                  Align(
+                                                    alignment:
+                                                        AlignmentDirectional(
+                                                            0.00, -1.00),
+                                                    child: Container(
+                                                      width: 15.0,
+                                                      height: 15.0,
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondary,
+                                                        shape: BoxShape.circle,
+                                                      ),
                                                     ),
                                                   ),
                                                 ],
@@ -598,9 +699,9 @@ class _UnirseaRutaWidgetState extends State<UnirseaRutaWidget> {
                                                     padding:
                                                         EdgeInsetsDirectional
                                                             .fromSTEB(0.0, 2.0,
-                                                                0.0, 10.0),
+                                                                0.0, 3.0),
                                                     child: Text(
-                                                      'Simón Bolivar - 8:00 A.M.',
+                                                      'Plaza Claro - 6:10 am',
                                                       textAlign:
                                                           TextAlign.start,
                                                       style:
@@ -627,9 +728,9 @@ class _UnirseaRutaWidgetState extends State<UnirseaRutaWidget> {
                                                     padding:
                                                         EdgeInsetsDirectional
                                                             .fromSTEB(0.0, 0.0,
-                                                                0.0, 10.0),
+                                                                0.0, 3.0),
                                                     child: Text(
-                                                      'Alkosto Av . 68 - 8:05 A.M.',
+                                                      'Simón Bolívar - 6:15 am',
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
@@ -654,9 +755,9 @@ class _UnirseaRutaWidgetState extends State<UnirseaRutaWidget> {
                                                     padding:
                                                         EdgeInsetsDirectional
                                                             .fromSTEB(0.0, 0.0,
-                                                                0.0, 10.0),
+                                                                0.0, 3.0),
                                                     child: Text(
-                                                      'Cruz Roja - SAMU - 8:10 A.M.',
+                                                      'Metrópolis - 6:25 am',
                                                       style: FlutterFlowTheme
                                                               .of(context)
                                                           .bodyMedium
@@ -675,7 +776,25 @@ class _UnirseaRutaWidgetState extends State<UnirseaRutaWidget> {
                                                       AlignmentDirectional(
                                                           -1.00, 0.00),
                                                   child: Text(
-                                                    'Exito 80 - 8:15 A.M.',
+                                                    'Cafam Floresta - 6:35 am',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily: 'Eras',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .secondary,
+                                                          useGoogleFonts: false,
+                                                        ),
+                                                  ),
+                                                ),
+                                                Align(
+                                                  alignment:
+                                                      AlignmentDirectional(
+                                                          -1.00, 0.00),
+                                                  child: Text(
+                                                    'Iserra 100 - 6:40 am',
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium
@@ -696,12 +815,49 @@ class _UnirseaRutaWidgetState extends State<UnirseaRutaWidget> {
                                     ),
                                   ),
                                   Align(
+                                    alignment: AlignmentDirectional(0.00, 0.48),
+                                    child: FFButtonWidget(
+                                      onPressed: () {
+                                        _mostrarDialogo(context);
+                                      },
+                                      text: 'Mandar Alarma',
+                                      options: FFButtonOptions(
+                                        height: 36.0,
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            15.0, 0.0, 15.0, 0.0),
+                                        iconPadding:
+                                            EdgeInsetsDirectional.fromSTEB(
+                                                0.0, 0.0, 0.0, 0.0),
+                                        color: FlutterFlowTheme.of(context)
+                                            .primary,
+                                        textStyle: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .override(
+                                              fontFamily: 'Eras',
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondary,
+                                              fontSize: 15.0,
+                                              fontWeight: FontWeight.bold,
+                                              useGoogleFonts: false,
+                                            ),
+                                        elevation: 3.0,
+                                        borderSide: BorderSide(
+                                          color: Colors.transparent,
+                                          width: 1.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
                                     alignment: AlignmentDirectional(0.00, 0.85),
                                     child: FFButtonWidget(
                                       onPressed: () async {
-                                        context.pushNamed('YaenRuta');
+                                        context.pushNamed('RutasRecomendadas');
                                       },
-                                      text: 'Aceptar',
+                                      text: 'Salir de la Ruta',
                                       options: FFButtonOptions(
                                         height: 40.0,
                                         padding: EdgeInsetsDirectional.fromSTEB(
@@ -748,13 +904,22 @@ class _UnirseaRutaWidgetState extends State<UnirseaRutaWidget> {
                                         sigmaX: 2.0,
                                         sigmaY: 2.0,
                                       ),
-                                      child: Container(
-                                        width: 70.0,
-                                        height: 70.0,
-                                        decoration: BoxDecoration(
-                                          color: Color(0x14FFFFFF),
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
+                                      child: InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          context.pushNamed('Estadisticas');
+                                        },
+                                        child: Container(
+                                          width: 70.0,
+                                          height: 70.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0x14FFFFFF),
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -784,4 +949,56 @@ class _UnirseaRutaWidgetState extends State<UnirseaRutaWidget> {
       ),
     );
   }
-}*/
+}
+
+class _MapItemDetails extends StatelessWidget {
+  const _MapItemDetails({
+    Key? key,
+    required this.mapMarkerR1,
+  }) : super(key: key);
+
+  final MapMarkerR1 mapMarkerR1;
+
+  @override
+  Widget build(BuildContext context) {
+    final _style = TextStyle(
+        fontFamily: 'Eras',
+        color: FlutterFlowTheme.of(context).secondary,
+        fontWeight: FontWeight.bold);
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(
+              sigmaX: 5.0,
+              sigmaY:
+                  5.0), // Ajusta el valor de sigmaX y sigmaY según sea necesario
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(9.0),
+            ),
+            // Tu contenido dentro del contenedor aquí
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      Text(
+                        mapMarkerR1.adress,
+                        style: _style,
+                      ),
+                      Text(
+                        mapMarkerR1.time,
+                        style: _style,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

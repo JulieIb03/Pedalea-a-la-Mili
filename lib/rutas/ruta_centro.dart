@@ -1,7 +1,7 @@
 import 'package:latlong2/latlong.dart';
 
-class MapMarker {
-  const MapMarker({
+class MapMarkerR3 {
+  const MapMarkerR3({
     required this.image,
     required this.adress,
     required this.time,
@@ -24,33 +24,33 @@ final _locations = [
 
 const _path = 'assets/images/';
 
-final mapMarkers = [
-  MapMarker(
+final mapMarkersR3 = [
+  MapMarkerR3(
       image: '${_path}Marker.png',
       adress: 'CC Mall Plaza',
       time: '6:10 am',
       location: _locations[0]),
-  MapMarker(
+  MapMarkerR3(
       image: '${_path}Marker.png',
       adress: 'Cl. 45 #28-100',
       time: '6:15 am',
       location: _locations[1]),
-  MapMarker(
+  MapMarkerR3(
       image: '${_path}Marker.png',
       adress: 'Movistar Arena',
       time: '6:25 am',
       location: _locations[2]),
-  MapMarker(
+  MapMarkerR3(
       image: '${_path}Marker.png',
       adress: 'Av NQS #74-98',
       time: '6:35 am',
       location: _locations[3]),
-  MapMarker(
+  MapMarkerR3(
       image: '${_path}Marker.png',
       adress: 'Cl. 92 #23-2',
       time: '6:40 am',
       location: _locations[4]),
-  MapMarker(
+  MapMarkerR3(
       image: '${_path}UMNGMarker.png',
       adress: 'Universidad Militar',
       time: '6:50 am',

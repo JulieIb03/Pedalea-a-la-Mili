@@ -11,6 +11,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'rutas_recomendadas_model.dart';
 export 'rutas_recomendadas_model.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 const MAPBOX_ACCESS_TOKEN =
     'sk.eyJ1Ijoia2Vyb3JlcyIsImEiOiJjbHJndzFxdmkwbG5nMnBxbW80eGZibml0In0.y3yPkMenroJ7DaWvNP2QcA';
@@ -33,11 +34,20 @@ class _RutasRecomendadasWidgetState extends State<RutasRecomendadasWidget> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
+  void solicitarPermisosSMS() async {
+    var status = await Permission.sms.status;
+    if (status != PermissionStatus.granted) {
+      status = await Permission.sms.request();
+      if (status != PermissionStatus.granted) {}
+    }
+  }
+
   Future<Position> determinePosition() async {
     LocationPermission permission;
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
+      solicitarPermisosSMS();
       if (permission == LocationPermission.denied) {
         return Future.error('error');
       }
@@ -228,18 +238,18 @@ class _RutasRecomendadasWidgetState extends State<RutasRecomendadasWidget> {
                                         child: PageView(
                                           children: [
                                             _buildButton(1, 'Ruta \n Occidente',
-                                                context),
-                                            _buildButton(
-                                                2, 'Ruta \n Centro', context),
-                                            _buildButton(
-                                                3, 'Ruta \n Norte', context),
+                                                Color(0xFFFFB600), context),
+                                            _buildButton(2, 'Ruta \n Centro',
+                                                Color(0xFF1DAEEF), context),
+                                            _buildButton(3, 'Ruta \n Norte',
+                                                Color(0xFF552E87), context),
                                           ],
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
-                                Align(
+                                /*Align(
                                   alignment: AlignmentDirectional(-0.25, 0.50),
                                   child: Container(
                                     width: 20.0,
@@ -255,7 +265,7 @@ class _RutasRecomendadasWidgetState extends State<RutasRecomendadasWidget> {
                                       ),
                                     ),
                                   ),
-                                ),
+                                ),*/
                               ],
                             ),
                           ),
@@ -318,8 +328,10 @@ class SelectedRoute {
   SelectedRoute(this.num);
 }
 
-Widget _buildButton(int number, String text, BuildContext context) {
+Widget _buildButton(
+    int number, String text, Color buttonColor, BuildContext context) {
   int selectedRoute = 1;
+
   return Align(
     alignment: AlignmentDirectional(0.00, 0.50),
     child: InkWell(
@@ -336,9 +348,11 @@ Widget _buildButton(int number, String text, BuildContext context) {
             break;
           case 2:
             print('ruta2');
+            context.pushNamed('UnirseaRuta2');
             break;
           case 3:
             print('ruta3');
+            context.pushNamed('UnirseaRuta3');
             break;
         }
       },
@@ -348,11 +362,17 @@ Widget _buildButton(int number, String text, BuildContext context) {
         decoration: BoxDecoration(
           color: FlutterFlowTheme.of(context).primaryBtnText,
           borderRadius: BorderRadius.circular(10.0),
+          border: Border(
+            left: BorderSide(
+              color: buttonColor,
+              width: 18.0,
+            ),
+          ),
         ),
         child: Stack(
           children: [
             Align(
-              alignment: AlignmentDirectional(-0.50, -0.85),
+              alignment: AlignmentDirectional(-0.70, -0.85),
               child: Text(
                 number.toString(),
                 style: FlutterFlowTheme.of(context).bodyMedium.override(
@@ -363,7 +383,7 @@ Widget _buildButton(int number, String text, BuildContext context) {
               ),
             ),
             Align(
-              alignment: AlignmentDirectional(0.25, 0.75),
+              alignment: AlignmentDirectional(0, 0.75),
               child: Text(
                 text,
                 style: FlutterFlowTheme.of(context).bodyMedium.override(

@@ -3,6 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pedalea_a_la_mili/rutas_recomendadas/rutas_recomendadas_widget.dart';
 import 'package:pedalea_a_la_mili/unirsea_ruta/unirsea_ruta1_widget.dart';
+import 'package:pedalea_a_la_mili/unirsea_ruta/unirsea_ruta2_widget.dart';
+import 'package:pedalea_a_la_mili/unirsea_ruta/unirsea_ruta3_widget.dart';
+import 'package:pedalea_a_la_mili/yaen_ruta/yaen_ruta1_widget.dart';
+import 'package:pedalea_a_la_mili/yaen_ruta/yaen_ruta2_widget.dart';
+import 'package:pedalea_a_la_mili/yaen_ruta/yaen_ruta3_widget.dart';
 import 'package:provider/provider.dart';
 
 import '/index.dart';
@@ -77,20 +82,45 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'iniciarRuta',
               builder: (context, params) => IniciarRutaWidget(),
             ),
-            FFRoute(
+            /*FFRoute(
               name: 'UnirseaRuta',
               path: 'unirseaRuta',
               builder: (context, params) => UnirseaRutaWidget(),
-            ),
+            ),*/
             FFRoute(
               name: 'UnirseaRuta1',
               path: 'unirseaRuta1',
               builder: (context, params) => UnirseaRuta1Widget(),
             ),
             FFRoute(
+              name: 'UnirseaRuta2',
+              path: 'unirseaRuta2',
+              builder: (context, params) => UnirseaRuta2Widget(),
+            ),
+            FFRoute(
+              name: 'UnirseaRuta3',
+              path: 'unirseaRuta3',
+              builder: (context, params) => UnirseaRuta3Widget(),
+            ),
+            FFRoute(
               name: 'YaenRuta',
               path: 'yaenRuta',
               builder: (context, params) => YaenRutaWidget(),
+            ),
+            FFRoute(
+              name: 'YaenRuta1',
+              path: 'yaenRuta1',
+              builder: (context, params) => YaenRuta1Widget(),
+            ),
+            FFRoute(
+              name: 'YaenRuta2',
+              path: 'yaenRuta2',
+              builder: (context, params) => YaenRuta2Widget(),
+            ),
+            FFRoute(
+              name: 'YaenRuta3',
+              path: 'yaenRuta3',
+              builder: (context, params) => YaenRuta3Widget(),
             ),
             FFRoute(
               name: 'Estadisticas',
