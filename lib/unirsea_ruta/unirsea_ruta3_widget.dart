@@ -42,7 +42,7 @@ class _UnirseaRuta3WidgetState extends State<UnirseaRuta3Widget> {
   final _pageController = PageController();
 
   late latlong.LatLng mainPosition = latlong.LatLng(4.683488, -74.042486);
-  late latlong.LatLng mainPositionCenter = latlong.LatLng(4.683488, -74.042486);
+  late latlong.LatLng mainPositionCenter = latlong.LatLng(4.622796, -74.067510);
   late UnirseaRuta3Model _model;
 
   late Timer locationTimer;
@@ -215,7 +215,7 @@ class _UnirseaRuta3WidgetState extends State<UnirseaRuta3Widget> {
                         center: mainPositionCenter,
                         minZoom: 3,
                         maxZoom: 30,
-                        zoom: 12,
+                        zoom: 12.5,
                         /*onPositionChanged: (position, hasGesture) {
                           if (hasGesture) {
                             double currentZoom = _mapController.zoom;

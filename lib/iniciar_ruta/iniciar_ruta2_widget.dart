@@ -249,7 +249,19 @@ class _IniciarRuta2WidgetState extends State<IniciarRuta2Widget> {
                                   ),
                                 );
                               },
-                            )
+                            ),
+                            /*Marker(
+                              point: latlong.LatLng(4.690543, -74.087160), 
+                              builder: (context) {
+                                return Container(
+                                  child: Image.network(
+                                    'assets/images/Seminar-rafiki_1.png',
+                                    width: 40,
+                                    height: 40,
+                                  ),
+                                );
+                              },
+                            ),*/
                           ],
                         )
                       ],
@@ -506,7 +518,7 @@ class _IniciarRuta2WidgetState extends State<IniciarRuta2Widget> {
                                     alignment: AlignmentDirectional(0.00, 0.80),
                                     child: FFButtonWidget(
                                       onPressed: () async {
-                                        context.pushNamed('IniciarRuta2');
+                                        context.pushNamed('UnirseaRuta2');
                                       },
                                       text: 'Unirme',
                                       options: FFButtonOptions(

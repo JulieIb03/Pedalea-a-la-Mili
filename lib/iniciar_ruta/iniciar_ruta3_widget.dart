@@ -42,7 +42,7 @@ class _IniciarRuta3WidgetState extends State<IniciarRuta3Widget> {
   final _pageController = PageController();
 
   late latlong.LatLng mainPosition = latlong.LatLng(4.683488, -74.042486);
-  late latlong.LatLng mainPositionCenter = latlong.LatLng(4.683488, -74.042486);
+  late latlong.LatLng mainPositionCenter = latlong.LatLng(4.622796, -74.067510);
   late IniciarRuta3Model _model;
 
   late Timer locationTimer;
@@ -215,7 +215,7 @@ class _IniciarRuta3WidgetState extends State<IniciarRuta3Widget> {
                         center: mainPositionCenter,
                         minZoom: 3,
                         maxZoom: 30,
-                        zoom: 12,
+                        zoom: 12.5,
                         /*onPositionChanged: (position, hasGesture) {
                           if (hasGesture) {
                             double currentZoom = _mapController.zoom;
@@ -504,7 +504,7 @@ class _IniciarRuta3WidgetState extends State<IniciarRuta3Widget> {
                                     alignment: AlignmentDirectional(0.00, 0.80),
                                     child: FFButtonWidget(
                                       onPressed: () async {
-                                        context.pushNamed('IniciarRuta3');
+                                        context.pushNamed('UnirseaRuta3');
                                       },
                                       text: 'Unirme',
                                       options: FFButtonOptions(
