@@ -159,7 +159,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'Estadisticas',
               path: 'estadisticas',
               builder: (context, params) => EstadisticasWidget(),
-            )
+            ),
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ),
       ].map((r) => r.toRoute(appStateNotifier)).toList(),

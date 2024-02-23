@@ -11,11 +11,16 @@ class HomePageModel extends FlutterFlowModel<HomePageWidget> {
   // State field(s) for TextField widget.
   FocusNode? textFieldFocusNode1;
   TextEditingController? textController1;
-  String? Function(BuildContext, String?)? textController1Validator;
+  String? Function(BuildContext, String?)? textController1Validator = (context, value) {
+    if (value == null || value.isEmpty) {
+      return 'Campo requerido';
+    }
+    return null; // Return null if the input is valid
+  };
   // State field(s) for TextField widget.
   FocusNode? textFieldFocusNode2;
   TextEditingController? textController2;
-  final textFieldMask2 = MaskTextInputFormatter(mask: '(###) ###-##-##');
+  final textFieldMask2 = MaskTextInputFormatter(mask: '(###) ###-##-##'); // commented, is a password field not a number
   String? Function(BuildContext, String?)? textController2Validator;
 
   /// Initialization and disposal methods.

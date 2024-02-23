@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -5,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'home_page_model.dart';
 export 'home_page_model.dart';
+import "package:http/http.dart" as http;
+import "dart:async";
+import 'dart:convert';
 
 class HomePageWidget extends StatefulWidget {
   const HomePageWidget({Key? key}) : super(key: key);
@@ -17,6 +22,43 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   late HomePageModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+// ! Back Queries
+  getUsers() async {
+    try {
+      var url = Uri.parse('http://10.0.2.2:3000/getUsers');
+      http.Response response = await http.get(url);
+      debugPrint(response.body);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  loginReq() async {
+    try {
+      var url = Uri.parse('http://10.0.2.2:3000/login');
+
+      // You can provide data to the server in the 'body' parameter.
+      // Replace 'yourData' with the actual data you want to send.
+      Map<String, dynamic> requestData = {
+        'email': _model.textController1.text,
+        'password': _model.textController2.text
+      };
+
+      http.Response response = await http.post(
+        url,
+        body: jsonEncode(requestData), // Encode data as JSON string.
+        headers: {'Content-Type': 'application/json'}, // Set content type.
+      );
+
+      Map<String, dynamic> responseBody = jsonDecode(response.body);
+
+      debugPrint(responseBody['login'].toString());
+      return responseBody['login'];
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
 
   @override
   void initState() {
@@ -258,7 +300,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                       focusNode: _model.textFieldFocusNode2,
                                       textCapitalization:
                                           TextCapitalization.none,
-                                      obscureText: false,
+                                      obscureText: true,
                                       decoration: InputDecoration(
                                         isDense: true,
                                         hintStyle: FlutterFlowTheme.of(context)
@@ -306,10 +348,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                             fontFamily: 'Poppins',
                                             fontWeight: FontWeight.normal,
                                           ),
-                                      keyboardType: TextInputType.number,
+                                      // keyboardType: TextInputType.number,
                                       validator: _model.textController2Validator
                                           .asValidator(context),
-                                      inputFormatters: [_model.textFieldMask2],
+                                      // inputFormatters: [_model.textFieldMask2],
                                     ),
                                   ),
                                   Padding(
@@ -324,7 +366,17 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                           return;
                                         }
 
-                                        context.pushNamed('RutasRecomendadas');
+                                        Map<String, dynamic> formResponse = {
+                                          'email': _model.textController1.text,
+                                          'password':
+                                              _model.textController2.text
+                                        };
+                                        debugPrint(formResponse.toString());
+
+                                        var isValid = await loginReq() as bool;
+                                        if (isValid)
+                                          context
+                                              .pushNamed('RutasRecomendadas');
                                       },
                                       text: 'Aceptar',
                                       options: FFButtonOptions(
