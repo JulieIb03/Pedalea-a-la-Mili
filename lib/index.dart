@@ -10,3 +10,5 @@ export '/iniciar_ruta/iniciar_ruta_widget.dart' show IniciarRutaWidget;
 export '/unirsea_ruta/unirsea_ruta_widget.dart' show UnirseaRutaWidget;
 export '/yaen_ruta/yaen_ruta_widget.dart' show YaenRutaWidget;
 export '/estadisticas/estadisticas_widget.dart' show EstadisticasWidget;
+
+String currentUrl = "http://10.0.2.2:3000";

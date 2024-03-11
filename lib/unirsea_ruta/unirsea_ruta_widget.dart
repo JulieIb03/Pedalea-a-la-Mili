@@ -1,4 +1,3 @@
-import 'package:pedalea_a_la_mili/rutas_recomendadas/rutas_recomendadas_widget.dart';
 
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';

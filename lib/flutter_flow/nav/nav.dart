@@ -21,7 +21,6 @@ import '/flutter_flow/flutter_flow_util.dart';
 export 'package:go_router/go_router.dart';
 export 'serialization_util.dart';
 
-import 'package:fluro/fluro.dart';
 
 const kTransitionInfoKey = '__transition_info__';
 

@@ -9,7 +9,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'rutas_recomendadas_model.dart';
 export 'rutas_recomendadas_model.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 const MAPBOX_ACCESS_TOKEN =
     'sk.eyJ1Ijoia2Vyb3JlcyIsImEiOiJjbHJndzFxdmkwbG5nMnBxbW80eGZibml0In0.y3yPkMenroJ7DaWvNP2QcA';

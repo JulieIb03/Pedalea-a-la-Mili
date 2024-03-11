@@ -1,6 +1,4 @@
-import 'dart:ffi';
 import 'package:pedalea_a_la_mili/rutas/ruta_occidente.dart';
-import 'package:pedalea_a_la_mili/rutas_recomendadas/rutas_recomendadas_widget.dart';
 
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -162,8 +160,8 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
   List<String> destinatario = ["3154149719"];
 
   void enviarMensaje(List<String> numero, String mensaje) async {
-    final double latitud = mainPosition!.latitude;
-    final double longitud = mainPosition!.longitude;
+    final double latitud = mainPosition.latitude;
+    final double longitud = mainPosition.longitude;
 
     final String? direccion = await obtenerDireccion(latitud, longitud);
 
@@ -204,7 +202,7 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
                     Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Color(0xFF023047), // Fondo del botón
+                    backgroundColor: Color(0xFF023047), // Fondo del botón
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(
                           12.0), // Radio de borde del botón
@@ -231,7 +229,7 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
                     Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Color(0xFF023047), // Fondo del botón
+                    backgroundColor: Color(0xFF023047), // Fondo del botón
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(
                           12.0), // Radio de borde del botón
@@ -258,7 +256,7 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
                     Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Color(0xFF023047), // Fondo del botón
+                    backgroundColor: Color(0xFF023047), // Fondo del botón
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(
                           12.0), // Radio de borde del botón

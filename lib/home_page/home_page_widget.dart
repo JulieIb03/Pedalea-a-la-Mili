@@ -1,5 +1,4 @@
-import 'dart:ffi';
-
+import '../index.dart' show currentUrl;
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -8,8 +7,7 @@ import 'package:flutter/services.dart';
 import 'home_page_model.dart';
 export 'home_page_model.dart';
 import "package:http/http.dart" as http;
-import "dart:async";
-import 'dart:convert';
+// import 'dart:convert';
 
 class HomePageWidget extends StatefulWidget {
   const HomePageWidget({Key? key}) : super(key: key);
@@ -26,7 +24,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 // ! Back Queries
   getUsers() async {
     try {
-      var url = Uri.parse('http://10.0.2.2:3000/getUsers');
+      var url = Uri.parse('$currentUrl/getUsers');
       http.Response response = await http.get(url);
       debugPrint(response.body);
     } catch (e) {
@@ -36,7 +34,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   loginReq() async {
     try {
-      var url = Uri.parse('http://10.0.2.2:3000/login');
+      var url = Uri.parse('$currentUrl/login');
 
       // You can provide data to the server in the 'body' parameter.
       // Replace 'yourData' with the actual data you want to send.
@@ -57,6 +55,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       return responseBody['login'];
     } catch (e) {
       debugPrint(e.toString());
+      return false;
     }
   }
 
