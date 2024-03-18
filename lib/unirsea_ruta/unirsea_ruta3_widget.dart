@@ -242,12 +242,12 @@ class _UnirseaRuta3WidgetState extends State<UnirseaRuta3Widget> {
                                 context,
                                 mainPosition,
                                 Icons
-                                    .person_pin), // Marcador existente con el icono de person_pin
+                                    .person_pin), 
                             createCustomMarker(
                                 context,
                                 otherPosition,
                                 Icons
-                                    .directions_bike), // Nuevo marcador con un icono diferente
+                                    .directions_bike), 
                           ],
                         ),
                       ],
@@ -817,7 +817,7 @@ class _UnirseaRuta3WidgetState extends State<UnirseaRuta3Widget> {
                                 20.0, 20.0, 20.0, 20.0),
                             child: InkWell(
                               onTap: () {
-                                context.pushNamed('Registro');
+                                context.pushNamed('HomePage');
                               },
                               child: Container(
                                 width: 60.0,

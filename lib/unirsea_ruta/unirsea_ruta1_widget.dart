@@ -865,7 +865,7 @@ class _UnirseaRuta1WidgetState extends State<UnirseaRuta1Widget>
                                 20.0, 20.0, 20.0, 20.0),
                             child: InkWell(
                               onTap: () {
-                                context.pushNamed('Registro');
+                                context.pushNamed('HomePage');
                               },
                               child: Container(
                                 width: 60.0,

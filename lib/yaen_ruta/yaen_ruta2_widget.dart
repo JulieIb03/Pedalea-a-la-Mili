@@ -1,4 +1,3 @@
-
 //import 'package:flutter_sms/flutter_sms.dart';
 import 'package:pedalea_a_la_mili/rutas/ruta_norte.dart';
 
@@ -869,26 +868,22 @@ class _YaenRuta2WidgetState extends State<YaenRuta2Widget> {
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 20.0, 20.0, 20.0, 20.0),
-                            child: Container(
-                              width: 60.0,
-                              height: 60.0,
-                              child: Stack(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    child: BackdropFilter(
-                                      filter: ImageFilter.blur(
-                                        sigmaX: 2.0,
-                                        sigmaY: 2.0,
-                                      ),
-                                      child: InkWell(
-                                        splashColor: Colors.transparent,
-                                        focusColor: Colors.transparent,
-                                        hoverColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
-                                        onTap: () async {
-                                          context.pushNamed('Estadisticas');
-                                        },
+                            child: InkWell(
+                              onTap: () {
+                                context.pushNamed('HomePage');
+                              },
+                              child: Container(
+                                width: 60.0,
+                                height: 60.0,
+                                child: Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                      child: BackdropFilter(
+                                        filter: ImageFilter.blur(
+                                          sigmaX: 2.0,
+                                          sigmaY: 2.0,
+                                        ),
                                         child: Container(
                                           width: 70.0,
                                           height: 70.0,
@@ -900,17 +895,18 @@ class _YaenRuta2WidgetState extends State<YaenRuta2Widget> {
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Align(
-                                    alignment: AlignmentDirectional(0.00, 0.00),
-                                    child: FaIcon(
-                                      FontAwesomeIcons.userAlt,
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondary,
-                                      size: 32.0,
+                                    Align(
+                                      alignment:
+                                          AlignmentDirectional(0.00, 0.00),
+                                      child: Icon(
+                                        Icons.power_settings_new,
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondary,
+                                        size: 32.0,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),

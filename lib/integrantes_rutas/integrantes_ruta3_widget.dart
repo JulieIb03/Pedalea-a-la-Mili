@@ -646,7 +646,7 @@ class _IntegrantesRuta3WidgetState extends State<IntegrantesRuta3Widget> {
                                 20.0, 20.0, 20.0, 20.0),
                             child: InkWell(
                               onTap: () {
-                                context.pushNamed('Registro');
+                                context.pushNamed('HomePage');
                               },
                               child: Container(
                                 width: 60.0,
