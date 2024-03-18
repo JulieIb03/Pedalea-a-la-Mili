@@ -1,8 +1,8 @@
 import '/flutter_flow/flutter_flow_util.dart';
-import 'yaen_ruta2_widget.dart' show YaenRuta2Widget;
+import 'yaen_ruta_lider3_widget.dart' show YaenRuta3LiderWidget;
 import 'package:flutter/material.dart';
 
-class YaenRuta2Model extends FlutterFlowModel<YaenRuta2Widget> {
+class YaenRuta3LiderModel extends FlutterFlowModel<YaenRuta3LiderWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();

@@ -363,8 +363,7 @@ class _IniciarRuta2LiderWidgetState extends State<IniciarRuta2LiderWidget> {
                                       children: [
                                         FFButtonWidget(
                                           onPressed: () async {
-                                            context
-                                                .pushNamed('UnirseaRuta2Lider');
+                                            context.pushNamed('YaenRuta2Lider');
                                           },
                                           text: 'Si',
                                           options: FFButtonOptions(
@@ -519,39 +518,45 @@ class _IniciarRuta2LiderWidgetState extends State<IniciarRuta2LiderWidget> {
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 20.0, 20.0, 20.0, 20.0),
-                            child: Container(
-                              width: 60.0,
-                              height: 60.0,
-                              child: Stack(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    child: BackdropFilter(
-                                      filter: ImageFilter.blur(
-                                        sigmaX: 2.0,
-                                        sigmaY: 2.0,
-                                      ),
-                                      child: Container(
-                                        width: 70.0,
-                                        height: 70.0,
-                                        decoration: BoxDecoration(
-                                          color: Color(0x14FFFFFF),
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
+                            child: InkWell(
+                              onTap: () {
+                                context.pushNamed('Registro');
+                              },
+                              child: Container(
+                                width: 60.0,
+                                height: 60.0,
+                                child: Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                      child: BackdropFilter(
+                                        filter: ImageFilter.blur(
+                                          sigmaX: 2.0,
+                                          sigmaY: 2.0,
+                                        ),
+                                        child: Container(
+                                          width: 70.0,
+                                          height: 70.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0x14FFFFFF),
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Align(
-                                    alignment: AlignmentDirectional(0.00, 0.00),
-                                    child: FaIcon(
-                                      FontAwesomeIcons.userLarge,
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondary,
-                                      size: 32.0,
+                                    Align(
+                                      alignment:
+                                          AlignmentDirectional(0.00, 0.00),
+                                      child: Icon(
+                                        Icons.power_settings_new,
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondary,
+                                        size: 32.0,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),

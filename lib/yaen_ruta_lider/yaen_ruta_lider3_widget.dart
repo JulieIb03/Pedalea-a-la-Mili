@@ -1,4 +1,5 @@
-import 'package:pedalea_a_la_mili/rutas/ruta_occidente.dart';
+//import 'package:flutter_sms/flutter_sms.dart';
+import 'package:pedalea_a_la_mili/rutas/ruta_centro.dart';
 
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -15,32 +16,32 @@ import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 import 'dart:convert';
 
-import 'yaen_ruta1_model.dart';
-export 'yaen_ruta1_model.dart';
+import 'yaen_ruta_lider1_model.dart';
+export 'yaen_ruta_lider1_model.dart';
 
 const MAPBOX_ACCESS_TOKEN =
     'sk.eyJ1Ijoia2Vyb3JlcyIsImEiOiJjbHJndzFxdmkwbG5nMnBxbW80eGZibml0In0.y3yPkMenroJ7DaWvNP2QcA';
 const MAPBOX_STYLE = 'mapbox/streets-v12';
 const MARKER_COLOR = Color(0xFF023047);
-const LINE_COLOR = Color(0xFFFFB600);
+const LINE_COLOR = Color(0xFF552E87);
 
-class YaenRuta1Widget extends StatefulWidget {
-  const YaenRuta1Widget({Key? key}) : super(key: key);
+class YaenRuta3LiderWidget extends StatefulWidget {
+  const YaenRuta3LiderWidget({Key? key}) : super(key: key);
 
   @override
-  _YaenRuta1WidgetState createState() => _YaenRuta1WidgetState();
+  _YaenRuta3LiderWidgetState createState() => _YaenRuta3LiderWidgetState();
 }
 
-class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
+class _YaenRuta3LiderWidgetState extends State<YaenRuta3LiderWidget> {
   final GlobalKey<ScaffoldState> scaffoldKey;
 
-  _YaenRuta1WidgetState() : scaffoldKey = GlobalKey<ScaffoldState>();
+  _YaenRuta3LiderWidgetState() : scaffoldKey = GlobalKey<ScaffoldState>();
 
   final _pageController = PageController();
 
   late latlong.LatLng mainPosition = latlong.LatLng(4.683488, -74.042486);
-  late latlong.LatLng mainPositionCenter = latlong.LatLng(4.642276, -74.073584);
-  late YaenRuta1Model _model;
+  late latlong.LatLng mainPositionCenter = latlong.LatLng(4.622796, -74.067510);
+  late YaenRuta1LiderModel _model;
 
   late Timer locationTimer;
 
@@ -48,8 +49,8 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
     final _markerList = <Marker>[];
     final _polylinePoints = <latlong.LatLng>[];
 
-    for (int i = 0; i < mapMarkersR1.length; i++) {
-      final mapItem = mapMarkersR1[i];
+    for (int i = 0; i < mapMarkersR3.length; i++) {
+      final mapItem = mapMarkersR3[i];
 
       // Agregar marcador
       _markerList.add(
@@ -88,8 +89,8 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
   List<Polyline> _buildPolylines() {
     final _polylinePoints = <latlong.LatLng>[];
 
-    for (int i = 0; i < mapMarkersR1.length; i++) {
-      final mapItem = mapMarkersR1[i];
+    for (int i = 0; i < mapMarkersR3.length; i++) {
+      final mapItem = mapMarkersR3[i];
       _polylinePoints.add(mapItem.location);
     }
 
@@ -284,7 +285,7 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
     getCurrentLocation();
     startLocationUpdates();
     super.initState();
-    _model = createModel(context, () => YaenRuta1Model());
+    _model = createModel(context, () => YaenRuta1LiderModel());
     _mapController = MapController();
   }
 
@@ -406,11 +407,11 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
                       child: PageView.builder(
                         controller: _pageController,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: mapMarkersR1.length,
+                        itemCount: mapMarkersR3.length,
                         itemBuilder: (context, index) {
-                          final item = mapMarkersR1[index];
+                          final item = mapMarkersR3[index];
                           return _MapItemDetails(
-                            mapMarkerR1: item,
+                            mapMarkerR3: item,
                           );
                         },
                       ),
@@ -493,8 +494,7 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
                                       width: 350.0,
                                       height: 60.0,
                                       decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context)
-                                            .primary,
+                                        color: Color(0xFF552E87),
                                         borderRadius: BorderRadius.only(
                                           bottomLeft: Radius.circular(0.0),
                                           bottomRight: Radius.circular(0.0),
@@ -512,15 +512,14 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
                                               alignment: AlignmentDirectional(
                                                   -0.80, 0.00),
                                               child: Text(
-                                                '1',
+                                                '3',
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
                                                         .override(
                                                           fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .secondary,
+                                                          color:
+                                                              Color(0xFFFFFFFF),
                                                           fontSize: 36.0,
                                                           fontWeight:
                                                               FontWeight.w600,
@@ -531,15 +530,14 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
                                               alignment: AlignmentDirectional(
                                                   0.80, 0.00),
                                               child: Text(
-                                                'Ruta Occidente',
+                                                'Ruta Centro',
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
                                                         .override(
                                                           fontFamily: 'Eras',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .secondary,
+                                                          color:
+                                                              Color(0xFFFFFFFF),
                                                           fontSize: 21.0,
                                                           fontWeight:
                                                               FontWeight.w800,
@@ -553,8 +551,7 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
                                     ),
                                   ),
                                   Align(
-                                    alignment:
-                                        AlignmentDirectional(0.00, -0.25),
+                                    alignment: AlignmentDirectional(0.00, -0.3),
                                     child: Container(
                                       width: 313.0,
                                       height: 130.0,
@@ -678,7 +675,7 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
                                                             .fromSTEB(0.0, 2.0,
                                                                 0.0, 3.0),
                                                     child: Text(
-                                                      'Plaza Claro - 6:10 am',
+                                                      'Cra 20 #182-35 - 6:10 am',
                                                       textAlign:
                                                           TextAlign.start,
                                                       style:
@@ -707,7 +704,7 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
                                                             .fromSTEB(0.0, 0.0,
                                                                 0.0, 3.0),
                                                     child: Text(
-                                                      'Simón Bolívar - 6:15 am',
+                                                      'Cl 170 con caño - 6:15 am',
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
@@ -734,14 +731,14 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
                                                             .fromSTEB(0.0, 0.0,
                                                                 0.0, 3.0),
                                                     child: Text(
-                                                      'Metrópolis - 6:25 am',
+                                                      'Cra 9 con Cl 153 - 6:25 am',
                                                       style: FlutterFlowTheme
                                                               .of(context)
                                                           .bodyMedium
                                                           .override(
                                                             fontFamily: 'Eras',
                                                             color: Color(
-                                                                0xFFFB8500),
+                                                                0xFF552E87),
                                                             useGoogleFonts:
                                                                 false,
                                                           ),
@@ -753,7 +750,7 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
                                                       AlignmentDirectional(
                                                           -1.00, 0.00),
                                                   child: Text(
-                                                    'Cafam Floresta - 6:35 am',
+                                                    'Cra 9 con Cl 134 - 6:35 am',
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium
@@ -771,7 +768,7 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
                                                       AlignmentDirectional(
                                                           -1.00, 0.00),
                                                   child: Text(
-                                                    'Iserra 100 - 6:40 am',
+                                                    'Cra 127 con Cra 11',
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium
@@ -792,7 +789,61 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
                                     ),
                                   ),
                                   Align(
-                                    alignment: AlignmentDirectional(0.00, 0.48),
+                                    alignment: AlignmentDirectional(0.00, 0.35),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        context.pushNamed('IntegrantesRuta3');
+                                      },
+                                      child: Container(
+                                        height: 36.0,
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15.0),
+                                        decoration: BoxDecoration(
+                                          color: Colors
+                                              .white, // Cambia el color del botón a blanco
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.black.withOpacity(0.1),
+                                              blurRadius: 4,
+                                              offset: Offset(0, 2),
+                                            ),
+                                          ],
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              'Integrantes Actuales',
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .titleSmall
+                                                  .override(
+                                                    fontFamily: 'Eras',
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .secondary,
+                                                    fontSize: 15.0,
+                                                    fontWeight: FontWeight.bold,
+                                                    useGoogleFonts: false,
+                                                  ),
+                                            ),
+                                            SizedBox(width: 8),
+                                            Image.asset(
+                                              'assets/images/trabajo-en-equipo_1.png',
+                                              width: 24,
+                                              height: 24,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment:
+                                        AlignmentDirectional(0.00, 0.615),
                                     child: FFButtonWidget(
                                       onPressed: () {
                                         _mostrarDialogo(context);
@@ -805,15 +856,12 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
                                         iconPadding:
                                             EdgeInsetsDirectional.fromSTEB(
                                                 0.0, 0.0, 0.0, 0.0),
-                                        color: FlutterFlowTheme.of(context)
-                                            .primary,
+                                        color: Color(0xFF552E87),
                                         textStyle: FlutterFlowTheme.of(context)
                                             .titleSmall
                                             .override(
                                               fontFamily: 'Eras',
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondary,
+                                              color: Color(0xFFFFFFFF),
                                               fontSize: 15.0,
                                               fontWeight: FontWeight.bold,
                                               useGoogleFonts: false,
@@ -829,12 +877,12 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
                                     ),
                                   ),
                                   Align(
-                                    alignment: AlignmentDirectional(0.00, 0.85),
+                                    alignment: AlignmentDirectional(0.00, 0.9),
                                     child: FFButtonWidget(
                                       onPressed: () async {
-                                        context.pushNamed('RutasRecomendadas');
+                                        context.pushNamed('IniciarRuta3Lider');
                                       },
-                                      text: 'Salir de la Ruta',
+                                      text: 'Terminar la Ruta',
                                       options: FFButtonOptions(
                                         height: 40.0,
                                         padding: EdgeInsetsDirectional.fromSTEB(
@@ -869,26 +917,22 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 20.0, 20.0, 20.0, 20.0),
-                            child: Container(
-                              width: 60.0,
-                              height: 60.0,
-                              child: Stack(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    child: BackdropFilter(
-                                      filter: ImageFilter.blur(
-                                        sigmaX: 2.0,
-                                        sigmaY: 2.0,
-                                      ),
-                                      child: InkWell(
-                                        splashColor: Colors.transparent,
-                                        focusColor: Colors.transparent,
-                                        hoverColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
-                                        onTap: () async {
-                                          context.pushNamed('Estadisticas');
-                                        },
+                            child: InkWell(
+                              onTap: () {
+                                context.pushNamed('Registro');
+                              },
+                              child: Container(
+                                width: 60.0,
+                                height: 60.0,
+                                child: Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                      child: BackdropFilter(
+                                        filter: ImageFilter.blur(
+                                          sigmaX: 2.0,
+                                          sigmaY: 2.0,
+                                        ),
                                         child: Container(
                                           width: 70.0,
                                           height: 70.0,
@@ -900,17 +944,18 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Align(
-                                    alignment: AlignmentDirectional(0.00, 0.00),
-                                    child: FaIcon(
-                                      FontAwesomeIcons.userAlt,
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondary,
-                                      size: 32.0,
+                                    Align(
+                                      alignment:
+                                          AlignmentDirectional(0.00, 0.00),
+                                      child: Icon(
+                                        Icons.power_settings_new,
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondary,
+                                        size: 32.0,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -931,10 +976,10 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
 class _MapItemDetails extends StatelessWidget {
   const _MapItemDetails({
     Key? key,
-    required this.mapMarkerR1,
+    required this.mapMarkerR3,
   }) : super(key: key);
 
-  final MapMarkerR1 mapMarkerR1;
+  final MapMarkerR3 mapMarkerR3;
 
   @override
   Widget build(BuildContext context) {
@@ -961,11 +1006,11 @@ class _MapItemDetails extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        mapMarkerR1.adress,
+                        mapMarkerR3.adress,
                         style: _style,
                       ),
                       Text(
-                        mapMarkerR1.time,
+                        mapMarkerR3.time,
                         style: _style,
                       ),
                     ],

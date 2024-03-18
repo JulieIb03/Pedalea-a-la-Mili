@@ -238,7 +238,6 @@ class _Registro2WidgetState extends State<Registro2Widget> {
                                       obscureText: false,
                                       decoration: InputDecoration(
                                         isDense: true,
-                                        labelText: '|',
                                         hintStyle: FlutterFlowTheme.of(context)
                                             .bodySmall,
                                         enabledBorder: UnderlineInputBorder(
@@ -277,6 +276,8 @@ class _Registro2WidgetState extends State<Registro2Widget> {
                                         filled: true,
                                         fillColor: FlutterFlowTheme.of(context)
                                             .primary,
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 12.0, horizontal: 12.0),
                                       ),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
@@ -321,7 +322,6 @@ class _Registro2WidgetState extends State<Registro2Widget> {
                                       obscureText: false,
                                       decoration: InputDecoration(
                                         isDense: true,
-                                        labelText: '|',
                                         hintStyle: FlutterFlowTheme.of(context)
                                             .bodySmall,
                                         enabledBorder: UnderlineInputBorder(
@@ -360,6 +360,8 @@ class _Registro2WidgetState extends State<Registro2Widget> {
                                         filled: true,
                                         fillColor: FlutterFlowTheme.of(context)
                                             .primary,
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 12.0, horizontal: 12.0),
                                       ),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
@@ -404,7 +406,6 @@ class _Registro2WidgetState extends State<Registro2Widget> {
                                       obscureText: false,
                                       decoration: InputDecoration(
                                         isDense: true,
-                                        labelText: 'Número',
                                         hintStyle: FlutterFlowTheme.of(context)
                                             .bodySmall,
                                         enabledBorder: UnderlineInputBorder(
@@ -443,6 +444,8 @@ class _Registro2WidgetState extends State<Registro2Widget> {
                                         filled: true,
                                         fillColor: FlutterFlowTheme.of(context)
                                             .primary,
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 12.0, horizontal: 12.0),
                                       ),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium

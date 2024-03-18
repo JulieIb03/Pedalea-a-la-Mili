@@ -18,6 +18,8 @@ class HomePageWidget extends StatefulWidget {
 
 class _HomePageWidgetState extends State<HomePageWidget> {
   late HomePageModel _model;
+  bool _isTyping = false;
+  bool _obscureText = true;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -68,13 +70,21 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     _model.textFieldFocusNode1 ??= FocusNode();
     _model.textController2 ??= TextEditingController();
     _model.textFieldFocusNode2 ??= FocusNode();
+    _model.textController2?.addListener(_onTextChanged);
   }
 
   @override
   void dispose() {
+    _model.textController2?.removeListener(_onTextChanged);
     _model.dispose();
 
     super.dispose();
+  }
+
+  void _onTextChanged() {
+    setState(() {
+      _isTyping = _model.textController2.text.isNotEmpty;
+    });
   }
 
   @override
@@ -258,6 +268,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                         filled: true,
                                         fillColor: FlutterFlowTheme.of(context)
                                             .primary,
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 12.0, horizontal: 12.0),
                                       ),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
@@ -294,63 +306,90 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                   ),
                                   Container(
                                     width: 270.0,
-                                    child: TextFormField(
-                                      controller: _model.textController2,
-                                      focusNode: _model.textFieldFocusNode2,
-                                      textCapitalization:
-                                          TextCapitalization.none,
-                                      obscureText: true,
-                                      decoration: InputDecoration(
-                                        isDense: true,
-                                        hintStyle: FlutterFlowTheme.of(context)
-                                            .bodySmall,
-                                        enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
+                                    child: Stack(
+                                      alignment: Alignment.centerRight,
+                                      children: [
+                                        TextFormField(
+                                          controller: _model.textController2,
+                                          focusNode: _model.textFieldFocusNode2,
+                                          textCapitalization:
+                                              TextCapitalization.none,
+                                          obscureText: _obscureText,
+                                          obscuringCharacter: '•',
+                                          decoration: InputDecoration(
+                                            isDense: true,
+                                            hintStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodySmall,
+                                            enabledBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1.0,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(15.0),
+                                            ),
+                                            focusedBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1.0,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(15.0),
+                                            ),
+                                            errorBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1.0,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(15.0),
+                                            ),
+                                            focusedErrorBorder:
+                                                UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1.0,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(15.0),
+                                            ),
+                                            filled: true,
+                                            fillColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .primary,
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical: 12.0,
+                                                    horizontal: 12.0),
                                           ),
-                                          borderRadius:
-                                              BorderRadius.circular(15.0),
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily: 'Poppins',
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                          // keyboardType: TextInputType.number,
+                                          validator: _model
+                                              .textController2Validator
+                                              .asValidator(context),
+                                          // inputFormatters: [_model.textFieldMask2],
                                         ),
-                                        focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
+                                        if (_isTyping)
+                                          Positioned(
+                                            right: 0,
+                                            child: IconButton(
+                                              icon: Icon(_obscureText
+                                                  ? Icons.visibility_off
+                                                  : Icons.visibility),
+                                              onPressed: () {
+                                                setState(() {
+                                                  _obscureText = !_obscureText;
+                                                });
+                                              },
+                                            ),
                                           ),
-                                          borderRadius:
-                                              BorderRadius.circular(15.0),
-                                        ),
-                                        errorBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(15.0),
-                                        ),
-                                        focusedErrorBorder:
-                                            UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(15.0),
-                                        ),
-                                        filled: true,
-                                        fillColor: FlutterFlowTheme.of(context)
-                                            .primary,
-                                      ),
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.normal,
-                                          ),
-                                      // keyboardType: TextInputType.number,
-                                      validator: _model.textController2Validator
-                                          .asValidator(context),
-                                      // inputFormatters: [_model.textFieldMask2],
+                                      ],
                                     ),
                                   ),
                                   Padding(
@@ -416,7 +455,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                           alignment:
                                               AlignmentDirectional(0.00, 0.00),
                                           child: Text(
-                                            'Si ya tienes una cuenta',
+                                            'Si aún no tienes una cuenta',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(

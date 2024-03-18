@@ -44,6 +44,7 @@ class _UnirseaRuta1WidgetState extends State<UnirseaRuta1Widget>
 
   late latlong.LatLng mainPosition = latlong.LatLng(4.683488, -74.042486);
   late latlong.LatLng mainPositionCenter = latlong.LatLng(4.642276, -74.073584);
+  late latlong.LatLng otherPosition = latlong.LatLng(4.655265, -74.101975);
   late UnirseaRuta1Model _model;
 
   late Timer locationTimer;
@@ -270,20 +271,18 @@ class _UnirseaRuta1WidgetState extends State<UnirseaRuta1Widget>
                         ),
                         MarkerLayer(
                           markers: [
-                            Marker(
-                              point: mainPosition,
-                              builder: (context) {
-                                return Container(
-                                  child: const Icon(
-                                    Icons.person_pin,
-                                    color: MARKER_COLOR,
-                                    size: 40,
-                                  ),
-                                );
-                              },
-                            )
+                            createCustomMarker(
+                                context,
+                                mainPosition,
+                                Icons
+                                    .person_pin), // Marcador existente con el icono de person_pin
+                            createCustomMarker(
+                                context,
+                                otherPosition,
+                                Icons
+                                    .directions_bike), // Nuevo marcador con un icono diferente
                           ],
-                        )
+                        ),
                       ],
                     ),
                     //PageView Paradas
@@ -864,39 +863,45 @@ class _UnirseaRuta1WidgetState extends State<UnirseaRuta1Widget>
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 20.0, 20.0, 20.0, 20.0),
-                            child: Container(
-                              width: 60.0,
-                              height: 60.0,
-                              child: Stack(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    child: BackdropFilter(
-                                      filter: ImageFilter.blur(
-                                        sigmaX: 2.0,
-                                        sigmaY: 2.0,
-                                      ),
-                                      child: Container(
-                                        width: 70.0,
-                                        height: 70.0,
-                                        decoration: BoxDecoration(
-                                          color: Color(0x14FFFFFF),
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
+                            child: InkWell(
+                              onTap: () {
+                                context.pushNamed('Registro');
+                              },
+                              child: Container(
+                                width: 60.0,
+                                height: 60.0,
+                                child: Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                      child: BackdropFilter(
+                                        filter: ImageFilter.blur(
+                                          sigmaX: 2.0,
+                                          sigmaY: 2.0,
+                                        ),
+                                        child: Container(
+                                          width: 70.0,
+                                          height: 70.0,
+                                          decoration: BoxDecoration(
+                                            color: Color(0x14FFFFFF),
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Align(
-                                    alignment: AlignmentDirectional(0.00, 0.00),
-                                    child: FaIcon(
-                                      FontAwesomeIcons.userLarge,
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondary,
-                                      size: 32.0,
+                                    Align(
+                                      alignment:
+                                          AlignmentDirectional(0.00, 0.00),
+                                      child: Icon(
+                                        Icons.power_settings_new,
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondary,
+                                        size: 32.0,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -1021,4 +1026,22 @@ class _MapItemDetails extends StatelessWidget {
       ),
     );
   }
+}
+
+Marker createCustomMarker(
+    BuildContext context, latlong.LatLng position, IconData icon) {
+  Color color = FlutterFlowTheme.of(context).secondary;
+
+  return Marker(
+    point: position,
+    builder: (context) {
+      return Container(
+        child: Icon(
+          icon,
+          color: color,
+          size: 40,
+        ),
+      );
+    },
+  );
 }

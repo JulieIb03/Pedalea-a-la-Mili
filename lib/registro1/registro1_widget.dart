@@ -270,7 +270,6 @@ class _Registro1WidgetState extends State<Registro1Widget> {
                                       obscureText: false,
                                       decoration: InputDecoration(
                                         isDense: true,
-                                        labelText: '|',
                                         hintStyle: FlutterFlowTheme.of(context)
                                             .bodySmall
                                             .override(
@@ -313,6 +312,8 @@ class _Registro1WidgetState extends State<Registro1Widget> {
                                         filled: true,
                                         fillColor: FlutterFlowTheme.of(context)
                                             .primary,
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 12.0, horizontal: 12.0),
                                       ),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
@@ -360,7 +361,6 @@ class _Registro1WidgetState extends State<Registro1Widget> {
                                       obscureText: false,
                                       decoration: InputDecoration(
                                         isDense: true,
-                                        labelText: '|',
                                         hintStyle: FlutterFlowTheme.of(context)
                                             .bodySmall
                                             .override(
@@ -403,6 +403,8 @@ class _Registro1WidgetState extends State<Registro1Widget> {
                                         filled: true,
                                         fillColor: FlutterFlowTheme.of(context)
                                             .primary,
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 12.0, horizontal: 12.0),
                                       ),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
