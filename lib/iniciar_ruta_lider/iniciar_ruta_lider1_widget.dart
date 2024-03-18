@@ -510,7 +510,7 @@ class _IniciarRuta1LiderWidgetState extends State<IniciarRuta1LiderWidget> {
                                 20.0, 20.0, 20.0, 20.0),
                             child: InkWell(
                               onTap: () {
-                                context.pushNamed('Registro');
+                                context.pushNamed('HomePage');
                               },
                               child: Container(
                                 width: 60.0,

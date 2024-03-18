@@ -919,7 +919,7 @@ class _YaenRuta3LiderWidgetState extends State<YaenRuta3LiderWidget> {
                                 20.0, 20.0, 20.0, 20.0),
                             child: InkWell(
                               onTap: () {
-                                context.pushNamed('Registro');
+                                context.pushNamed('HomePage');
                               },
                               child: Container(
                                 width: 60.0,

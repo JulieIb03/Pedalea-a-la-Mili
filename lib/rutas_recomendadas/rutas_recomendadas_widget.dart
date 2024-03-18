@@ -282,7 +282,7 @@ class _RutasRecomendadasWidgetState extends State<RutasRecomendadasWidget> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  context.pushNamed('Registro');
+                                  context.pushNamed('HomePage');
                                 },
                                 child: Container(
                                   width: 60.0,
