@@ -9,6 +9,8 @@ export 'home_page_model.dart';
 import "package:http/http.dart" as http;
 // import 'dart:convert';
 
+String? loginEmail;
+
 class HomePageWidget extends StatefulWidget {
   const HomePageWidget({Key? key}) : super(key: key);
 
@@ -54,7 +56,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       Map<String, dynamic> responseBody = jsonDecode(response.body);
 
       debugPrint(responseBody['login'].toString());
-      return responseBody['login'];
+      return responseBody;
     } catch (e) {
       debugPrint(e.toString());
       return false;
@@ -411,10 +413,39 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                         };
                                         debugPrint(formResponse.toString());
 
-                                        var isValid = await loginReq() as bool;
-                                        if (isValid)
-                                          context
-                                              .pushNamed('RutasRecomendadas');
+                                        var isValid = await loginReq();
+                                        var memberInfo = isValid["res"][0];
+
+                                        if (isValid['login']) {
+                                          loginEmail =
+                                              _model.textController1.text;
+                                          if (memberInfo["roleApp"]
+                                                  .toString() ==
+                                              "lider") {
+                                            debugPrint(memberInfo["roleApp"]
+                                                .toString());
+                                            switch (memberInfo["routeNum"]
+                                                .toString()) {
+                                              case "Ruta 1 - Occidente":
+                                                context.pushNamed(
+                                                    'IniciarRuta1Lider');
+                                                break;
+                                              case "Ruta 2 - Norte":
+                                                context.pushNamed(
+                                                    'IniciarRuta2Lider');
+                                                break;
+                                              case "Ruta 3 - Centro":
+                                                context.pushNamed(
+                                                    'IniciarRuta3Lider');
+                                                break;
+                                              default:
+                                                debugPrint("No hay rutas");
+                                            }
+                                          } else {
+                                            context
+                                                .pushNamed('RutasRecomendadas');
+                                          }
+                                        }
                                       },
                                       text: 'Aceptar',
                                       options: FFButtonOptions(

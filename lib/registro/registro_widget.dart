@@ -9,6 +9,7 @@ import "package:http/http.dart" as http;
 import '../index.dart' show currentUrl;
 
 String? docID;
+
 class RegistroWidget extends StatefulWidget {
   const RegistroWidget({Key? key}) : super(key: key);
 
@@ -18,7 +19,7 @@ class RegistroWidget extends StatefulWidget {
 
 class _RegistroWidgetState extends State<RegistroWidget> {
   late RegistroModel _model;
-
+  bool _isTyping = false;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   userRegister() async {
@@ -481,7 +482,8 @@ class _RegistroWidgetState extends State<RegistroWidget> {
                                                 .validate()) {
                                           return;
                                         }
-                                        var isValid = await userRegister() as bool;
+                                        var isValid =
+                                            await userRegister() as bool;
                                         if (isValid)
                                           context.pushNamed('Registro1');
                                       },

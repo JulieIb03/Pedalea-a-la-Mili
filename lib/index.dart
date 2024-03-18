@@ -11,4 +11,5 @@ export '/unirsea_ruta/unirsea_ruta_widget.dart' show UnirseaRutaWidget;
 export '/yaen_ruta/yaen_ruta_widget.dart' show YaenRutaWidget;
 export '/estadisticas/estadisticas_widget.dart' show EstadisticasWidget;
 
-String currentUrl = "http://10.0.2.2:3000";
+// String currentUrl = "http://10.0.2.2:3000";
+String currentUrl = "https://back-pedalea-production.up.railway.app";
