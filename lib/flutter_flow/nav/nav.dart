@@ -13,6 +13,13 @@ import 'package:pedalea_a_la_mili/unirsea_ruta/unirsea_ruta3_widget.dart';
 import 'package:pedalea_a_la_mili/yaen_ruta/yaen_ruta1_widget.dart';
 import 'package:pedalea_a_la_mili/yaen_ruta/yaen_ruta2_widget.dart';
 import 'package:pedalea_a_la_mili/yaen_ruta/yaen_ruta3_widget.dart';
+import 'package:pedalea_a_la_mili/yaen_ruta_lider/yaen_ruta_lider1_widget.dart';
+import 'package:pedalea_a_la_mili/yaen_ruta_lider/yaen_ruta_lider2_widget.dart';
+import 'package:pedalea_a_la_mili/yaen_ruta_lider/yaen_ruta_lider3_widget.dart';
+import 'package:pedalea_a_la_mili/integrantes_rutas/integrantes_ruta1_widget.dart';
+import 'package:pedalea_a_la_mili/integrantes_rutas/integrantes_ruta2_widget.dart';
+import 'package:pedalea_a_la_mili/integrantes_rutas/integrantes_ruta3_widget.dart';
+
 import 'package:provider/provider.dart';
 
 import '/index.dart';
@@ -20,7 +27,6 @@ import '/flutter_flow/flutter_flow_util.dart';
 
 export 'package:go_router/go_router.dart';
 export 'serialization_util.dart';
-
 
 const kTransitionInfoKey = '__transition_info__';
 
@@ -153,6 +159,36 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'YaenRuta3',
               path: 'yaenRuta3',
               builder: (context, params) => YaenRuta3Widget(),
+            ),
+            FFRoute(
+              name: 'YaenRuta1Lider',
+              path: 'yaenRuta1lider',
+              builder: (context, params) => YaenRuta1LiderWidget(),
+            ),
+            FFRoute(
+              name: 'YaenRuta2Lider',
+              path: 'yaenRuta2lider',
+              builder: (context, params) => YaenRuta2LiderWidget(),
+            ),
+            FFRoute(
+              name: 'YaenRuta3Lider',
+              path: 'yaenRuta3lider',
+              builder: (context, params) => YaenRuta3LiderWidget(),
+            ),
+            FFRoute(
+              name: 'IntegrantesRuta1',
+              path: 'integrantesRuta1',
+              builder: (context, params) => IntegrantesRuta1Widget(),
+            ),
+            FFRoute(
+              name: 'IntegrantesRuta2',
+              path: 'integrantesRuta2',
+              builder: (context, params) => IntegrantesRuta2Widget(),
+            ),
+            FFRoute(
+              name: 'IntegrantesRuta3',
+              path: 'integrantesRuta3',
+              builder: (context, params) => IntegrantesRuta3Widget(),
             ),
             FFRoute(
               name: 'Estadisticas',
