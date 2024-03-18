@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'registro_model.dart';
 export 'registro_model.dart';
+import "package:http/http.dart" as http;
+import '../index.dart' show currentUrl;
 
+String? docID;
 class RegistroWidget extends StatefulWidget {
   const RegistroWidget({Key? key}) : super(key: key);
 
@@ -17,6 +20,35 @@ class _RegistroWidgetState extends State<RegistroWidget> {
   late RegistroModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  userRegister() async {
+    try {
+      var url = Uri.parse('$currentUrl/register');
+
+      // You can provide data to the server in the 'body' parameter.
+      // Replace 'yourData' with the actual data you want to send.
+      Map<String, dynamic> requestData = {
+        'name': _model.textController1.text,
+        'email': _model.textController2.text,
+        'password': _model.textController3.text,
+      };
+
+      http.Response response = await http.post(
+        url,
+        body: jsonEncode(requestData), // Encode data as JSON string.
+        headers: {'Content-Type': 'application/json'}, // Set content type.
+      );
+
+      Map<String, dynamic> responseBody = jsonDecode(response.body);
+
+      // debugPrint(responseBody.toString());
+      docID = responseBody['docID'];
+      return responseBody['status'];
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
 
   @override
   void initState() {
@@ -182,7 +214,7 @@ class _RegistroWidgetState extends State<RegistroWidget> {
                                       obscureText: false,
                                       decoration: InputDecoration(
                                         isDense: true,
-                                        labelText: '|',
+                                        labelText: 'Nombre Completo',
                                         hintStyle: FlutterFlowTheme.of(context)
                                             .bodySmall,
                                         enabledBorder: UnderlineInputBorder(
@@ -265,7 +297,7 @@ class _RegistroWidgetState extends State<RegistroWidget> {
                                       obscureText: false,
                                       decoration: InputDecoration(
                                         isDense: true,
-                                        labelText: '|',
+                                        labelText: 'Correo electrónico',
                                         hintStyle: FlutterFlowTheme.of(context)
                                             .bodySmall,
                                         enabledBorder: UnderlineInputBorder(
@@ -311,6 +343,7 @@ class _RegistroWidgetState extends State<RegistroWidget> {
                                             fontFamily: 'Poppins',
                                             fontWeight: FontWeight.normal,
                                           ),
+                                      keyboardType: TextInputType.emailAddress,
                                       validator: _model.textController2Validator
                                           .asValidator(context),
                                     ),
@@ -345,10 +378,10 @@ class _RegistroWidgetState extends State<RegistroWidget> {
                                       focusNode: _model.textFieldFocusNode3,
                                       textCapitalization:
                                           TextCapitalization.none,
-                                      obscureText: false,
+                                      obscureText: true,
                                       decoration: InputDecoration(
                                         isDense: true,
-                                        labelText: '|',
+                                        labelText: 'Contraseña',
                                         hintStyle: FlutterFlowTheme.of(context)
                                             .bodySmall,
                                         enabledBorder: UnderlineInputBorder(
@@ -394,10 +427,11 @@ class _RegistroWidgetState extends State<RegistroWidget> {
                                             fontFamily: 'Poppins',
                                             fontWeight: FontWeight.normal,
                                           ),
-                                      keyboardType: TextInputType.number,
                                       validator: _model.textController3Validator
                                           .asValidator(context),
-                                      inputFormatters: [_model.textFieldMask3],
+                                      keyboardType:
+                                          TextInputType.visiblePassword,
+                                      // inputFormatters: [_model.textFieldMask3],
                                     ),
                                   ),
                                   Padding(
@@ -411,8 +445,9 @@ class _RegistroWidgetState extends State<RegistroWidget> {
                                                 .validate()) {
                                           return;
                                         }
-
-                                        context.pushNamed('Registro1');
+                                        var isValid = await userRegister() as bool;
+                                        if (isValid)
+                                          context.pushNamed('Registro1');
                                       },
                                       text: 'Aceptar',
                                       options: FFButtonOptions(

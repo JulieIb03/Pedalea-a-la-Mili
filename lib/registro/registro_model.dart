@@ -1,7 +1,6 @@
 import '/flutter_flow/flutter_flow_util.dart';
 import 'registro_widget.dart' show RegistroWidget;
 import 'package:flutter/material.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class RegistroModel extends FlutterFlowModel<RegistroWidget> {
   ///  State fields for stateful widgets in this page.
@@ -16,6 +15,9 @@ class RegistroModel extends FlutterFlowModel<RegistroWidget> {
     if (val == null || val.isEmpty) {
       return 'Este campo es obligatorio.';
     }
+    if (val.length < 3) {
+      return 'El nombre debe tener al menos 3 caracteres.';
+    }
 
     return null;
   }
@@ -28,6 +30,11 @@ class RegistroModel extends FlutterFlowModel<RegistroWidget> {
     if (val == null || val.isEmpty) {
       return 'Este campo es obligatorio.';
     }
+    // regex to check if val is a valid email
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!emailRegex.hasMatch(val)) {
+      return 'Correo electrónico inválido.';
+    }
 
     return null;
   }
@@ -35,12 +42,16 @@ class RegistroModel extends FlutterFlowModel<RegistroWidget> {
   // State field(s) for TextField widget.
   FocusNode? textFieldFocusNode3;
   TextEditingController? textController3;
-  final textFieldMask3 = MaskTextInputFormatter(mask: '(###) ###-##-##');
+  // final textFieldMask3 = MaskTextInputFormatter(mask: '(###) ###-##-##');
   String? Function(BuildContext, String?)? textController3Validator;
   String? _textController3Validator(BuildContext context, String? val) {
     if (val == null || val.isEmpty) {
       return 'Este campo es obligatorio.';
     }
+    if (val.length < 8) {
+      return 'La contraseña debe tener al menos 8 caracteres.';
+    }
+
 
     return null;
   }

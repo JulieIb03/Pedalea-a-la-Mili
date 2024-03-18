@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'registro1_model.dart';
 export 'registro1_model.dart';
+import '../registro/registro_widget.dart' show docID;
+import "package:http/http.dart" as http;
+import '../index.dart' show currentUrl;
 
 class Registro1Widget extends StatefulWidget {
   const Registro1Widget({Key? key}) : super(key: key);
@@ -19,6 +22,37 @@ class _Registro1WidgetState extends State<Registro1Widget> {
   late Registro1Model _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  userUpdate() async {
+    try {
+      var url = Uri.parse('$currentUrl/updateUser');
+
+      // You can provide data to the server in the 'body' parameter.
+      // Replace 'yourData' with the actual data you want to send.
+      Map<String, dynamic> requestData = {
+        'id': docID,
+        'roleUni': _model.dropDownValue1,
+        'cel': _model.textController1.text,
+        'career': _model.textController2.text,
+        'transport': _model.dropDownValue2,
+      };
+
+
+      http.Response response = await http.post(
+        url,
+        body: jsonEncode(requestData), // Encode data as JSON string.
+        headers: {'Content-Type': 'application/json'}, // Set content type.
+      );
+
+      Map<String, dynamic> responseBody = jsonDecode(response.body);
+
+      debugPrint(responseBody.toString());
+      return responseBody['status'];
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
 
   @override
   void initState() {
@@ -489,8 +523,10 @@ class _Registro1WidgetState extends State<Registro1Widget> {
                                             );
                                             return;
                                           }
-
-                                          context.pushNamed('Registro2');
+                                          var isValid =
+                                              await userUpdate() as bool;
+                                          if (isValid)
+                                            context.pushNamed('Registro2');
                                         },
                                         text: 'Aceptar',
                                         options: FFButtonOptions(
