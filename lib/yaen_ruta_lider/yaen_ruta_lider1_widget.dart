@@ -157,7 +157,7 @@ class _YaenRuta1LiderWidgetState extends State<YaenRuta1LiderWidget> {
     return null;
   }
 
-  List<String> destinatario = ["3154149719"];
+  List<String> destinatario = ["3213887086"];
 
   void enviarMensaje(List<String> numero, String mensaje) async {
     final double latitud = mainPosition.latitude;
@@ -167,7 +167,7 @@ class _YaenRuta1LiderWidgetState extends State<YaenRuta1LiderWidget> {
 
     if (direccion != null) {
       final String mensajeConUbicacion =
-          '$mensaje\nMi dirección aproximada es: $direccion\nhttps://www.google.com/maps?q=$latitud,$longitud';
+          '$mensaje\nNuestra dirección aproximada es: $direccion\nhttps://www.google.com/maps?q=$latitud,$longitud';
 
       final Uri uriwsp =
           Uri.parse('https://wa.me/$numero?text=$mensajeConUbicacion');
@@ -198,7 +198,7 @@ class _YaenRuta1LiderWidgetState extends State<YaenRuta1LiderWidget> {
                 child: ElevatedButton(
                   onPressed: () {
                     enviarMensaje(destinatario,
-                        'Necesito ayuda, mi bicicleta tuvo un daño.');
+                        'El grupo de la ruta 1, Ha sufrido un daño en sus bicicletas!.');
                     Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(
@@ -225,7 +225,7 @@ class _YaenRuta1LiderWidgetState extends State<YaenRuta1LiderWidget> {
                 child: ElevatedButton(
                   onPressed: () {
                     enviarMensaje(
-                        destinatario, 'Me acaban de robar la bicicleta.');
+                        destinatario, 'El grupo de la ruta 1, Ha sufrido un robo!.');
                     Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(
@@ -252,7 +252,7 @@ class _YaenRuta1LiderWidgetState extends State<YaenRuta1LiderWidget> {
                 child: ElevatedButton(
                   onPressed: () {
                     enviarMensaje(destinatario,
-                        '¡Emergencia! He tenido un accidente en mi bicicleta.');
+                        'El grupo de la ruta 1, Ha sufrido un accidente!.');
                     Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(
