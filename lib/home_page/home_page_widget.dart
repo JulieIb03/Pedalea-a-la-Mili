@@ -9,7 +9,7 @@ export 'home_page_model.dart';
 import "package:http/http.dart" as http;
 // import 'dart:convert';
 
-String? loginEmail;
+String? loginID;
 
 class HomePageWidget extends StatefulWidget {
   const HomePageWidget({Key? key}) : super(key: key);
@@ -54,7 +54,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       );
 
       Map<String, dynamic> responseBody = jsonDecode(response.body);
-
+      loginID = responseBody['res'][0]['id'];
       debugPrint(responseBody['login'].toString());
       return responseBody;
     } catch (e) {
@@ -279,6 +279,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                             fontFamily: 'Poppins',
                                             fontWeight: FontWeight.normal,
                                           ),
+                                      keyboardType: TextInputType.emailAddress,
                                       validator: _model.textController1Validator
                                           .asValidator(context),
                                     ),
@@ -371,7 +372,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                 fontFamily: 'Poppins',
                                                 fontWeight: FontWeight.normal,
                                               ),
-                                          // keyboardType: TextInputType.number,
+                                          keyboardType: TextInputType.visiblePassword,
                                           validator: _model
                                               .textController2Validator
                                               .asValidator(context),
@@ -417,8 +418,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                         var memberInfo = isValid["res"][0];
 
                                         if (isValid['login']) {
-                                          loginEmail =
-                                              _model.textController1.text;
                                           if (memberInfo["roleApp"]
                                                   .toString() ==
                                               "lider") {

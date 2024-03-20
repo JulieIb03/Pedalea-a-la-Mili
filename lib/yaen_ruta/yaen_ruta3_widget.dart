@@ -13,6 +13,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart' as latlong;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import '../home_page/home_page_widget.dart' show loginID;
+import '../index.dart' show currentUrl;
 import 'dart:async';
 import 'dart:convert';
 
@@ -48,6 +50,20 @@ class _YaenRuta3WidgetState extends State<YaenRuta3Widget>
   late YaenRuta1Model _model;
 
   late Timer locationTimer;
+
+// ! Back Queries
+  getUserEmergencyCel() async {
+    try {
+      var url = Uri.parse('$currentUrl/getUser/$loginID');
+      http.Response response = await http.get(url);
+      var data = jsonDecode(response.body);
+      String str = data['celEmergency'];
+      String num = str.replaceAll(RegExp(r'\D'), '');
+      return num;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
 
   List<Marker> _buildMarkers() {
     final _markerList = <Marker>[];
@@ -162,7 +178,13 @@ class _YaenRuta3WidgetState extends State<YaenRuta3Widget>
     return null;
   }
 
-  List<String> destinatario = ["3133745042"];
+  List<String> destinatario = [];
+
+  void initDestinatario() async {
+    String? num = await getUserEmergencyCel();
+    destinatario = ["57$num"];
+    debugPrint("Destinatario: $num");
+  }
 
   void enviarMensaje(List<String> numero, String mensaje) async {
     final double latitud = mainPosition.latitude;
@@ -301,6 +323,8 @@ class _YaenRuta3WidgetState extends State<YaenRuta3Widget>
 
     // Iniciar la animación
     _controller.repeat(reverse: false);
+
+    initDestinatario();
   }
 
   void startLocationUpdates() {

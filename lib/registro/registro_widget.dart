@@ -225,7 +225,6 @@ class _RegistroWidgetState extends State<RegistroWidget> {
                                       obscureText: false,
                                       decoration: InputDecoration(
                                         isDense: true,
-                                        labelText: 'Nombre Completo',
                                         hintStyle: FlutterFlowTheme.of(context)
                                             .bodySmall,
                                         enabledBorder: UnderlineInputBorder(
@@ -310,7 +309,6 @@ class _RegistroWidgetState extends State<RegistroWidget> {
                                       obscureText: false,
                                       decoration: InputDecoration(
                                         isDense: true,
-                                        labelText: 'Correo electrónico',
                                         hintStyle: FlutterFlowTheme.of(context)
                                             .bodySmall,
                                         enabledBorder: UnderlineInputBorder(
