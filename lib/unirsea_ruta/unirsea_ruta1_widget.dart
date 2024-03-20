@@ -1,5 +1,5 @@
 import 'package:pedalea_a_la_mili/rutas/ruta_occidente.dart';
-
+import 'dart:math';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -11,6 +11,7 @@ import 'package:latlong2/latlong.dart' as latlong;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
+
 /*import 'package:location/location.dart';*/
 
 import 'unirsea_ruta1_model.dart';
@@ -32,11 +33,13 @@ class UnirseaRuta1Widget extends StatefulWidget {
 }
 
 class _UnirseaRuta1WidgetState extends State<UnirseaRuta1Widget>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   int? selectedRadioValue;
   int _selectedIndex = 0;
   final GlobalKey<ScaffoldState> scaffoldKey;
   late final AnimationController _animationController;
+
+  late final AnimationController _controller;
 
   _UnirseaRuta1WidgetState() : scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -175,6 +178,16 @@ class _UnirseaRuta1WidgetState extends State<UnirseaRuta1Widget>
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 600));
     _animationController.repeat(reverse: true);
+
+    // Inicializar el controlador de animación
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(
+          seconds: 60), // Duración de la animación (5 segundos en este caso)
+    );
+
+    // Iniciar la animación
+    _controller.repeat(reverse: false);
   }
 
   void startLocationUpdates() {
@@ -192,6 +205,7 @@ class _UnirseaRuta1WidgetState extends State<UnirseaRuta1Widget>
     stopLocationUpdates();
     _model.dispose();
     _animationController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -272,15 +286,20 @@ class _UnirseaRuta1WidgetState extends State<UnirseaRuta1Widget>
                         MarkerLayer(
                           markers: [
                             createCustomMarker(
-                                context,
-                                mainPosition,
-                                Icons
-                                    .person_pin), // Marcador existente con el icono de person_pin
-                            createCustomMarker(
-                                context,
-                                otherPosition,
-                                Icons
-                                    .directions_bike), // Nuevo marcador con un icono diferente
+                              context,
+                              mainPosition,
+                              AssetImage('assets/images/Usuario.png'),
+                            ),
+                            createAnimatedMarker(
+                              context,
+                              [
+                                latlong.LatLng(4.650651, -74.107197),
+                                latlong.LatLng(4.661459, -74.097073)
+                              ],
+                              AssetImage('assets/images/Lider.png'),
+                              true, // Animar el marcador
+                              _controller, // Controlador de animación
+                            ),
                           ],
                         ),
                       ],
@@ -1029,19 +1048,70 @@ class _MapItemDetails extends StatelessWidget {
 }
 
 Marker createCustomMarker(
-    BuildContext context, latlong.LatLng position, IconData icon) {
+    BuildContext context, latlong.LatLng position, ImageProvider image) {
   Color color = FlutterFlowTheme.of(context).secondary;
 
   return Marker(
     point: position,
     builder: (context) {
       return Container(
-        child: Icon(
-          icon,
-          color: color,
-          size: 40,
+        child: Image(
+          image: image,
+          width: 40,
+          height: 40,
         ),
       );
+    },
+  );
+}
+
+class LatLngTween extends Tween<latlong.LatLng> {
+  final List<latlong.LatLng> points;
+
+  LatLngTween({required this.points})
+      : super(begin: points.first, end: points.last);
+
+  @override
+  latlong.LatLng lerp(double t) {
+    final int index = ((points.length - 1) * t).floor();
+    final double localT = (points.length - 1) * t - index;
+
+    final latlong.LatLng point1 = points[index];
+    final latlong.LatLng point2 = points[index + 1];
+
+    return latlong.LatLng(
+      lerpDouble(point1.latitude, point2.latitude, localT)!,
+      lerpDouble(point1.longitude, point2.longitude, localT)!,
+    );
+  }
+}
+
+Marker createAnimatedMarker(
+    BuildContext context,
+    List<latlong.LatLng> positions,
+    ImageProvider markerImage,
+    bool animate,
+    AnimationController controller) {
+  final LatLngTween tween = LatLngTween(points: positions);
+
+  return Marker(
+    width: 50.0,
+    height: 50.0,
+    point: tween
+        .animate(controller)
+        .value, // Obtener la posición interpolada basada en el valor de la animación
+    builder: (ctx) {
+      // Si se debe animar el marcador, aplicar la animación
+      if (animate) {
+        return Container(
+          child: Image(image: markerImage), // Imagen del marcador
+        );
+      } else {
+        // Si no se debe animar, simplemente mostrar la imagen del marcador
+        return Container(
+          child: Image(image: markerImage), // Imagen del marcador
+        );
+      }
     },
   );
 }

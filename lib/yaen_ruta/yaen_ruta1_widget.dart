@@ -31,8 +31,11 @@ class YaenRuta1Widget extends StatefulWidget {
   _YaenRuta1WidgetState createState() => _YaenRuta1WidgetState();
 }
 
-class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
+class _YaenRuta1WidgetState extends State<YaenRuta1Widget>
+    with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> scaffoldKey;
+
+  late final AnimationController _controller;
 
   _YaenRuta1WidgetState() : scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -40,6 +43,7 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
 
   late latlong.LatLng mainPosition = latlong.LatLng(4.683488, -74.042486);
   late latlong.LatLng mainPositionCenter = latlong.LatLng(4.642276, -74.073584);
+  late latlong.LatLng otherPosition = latlong.LatLng(4.759670, -74.042400);
   late YaenRuta1Model _model;
 
   late Timer locationTimer;
@@ -157,7 +161,7 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
     return null;
   }
 
-  List<String> destinatario = ["3154149719"];
+  List<String> destinatario = ["3133745042"];
 
   void enviarMensaje(List<String> numero, String mensaje) async {
     final double latitud = mainPosition.latitude;
@@ -286,6 +290,16 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
     super.initState();
     _model = createModel(context, () => YaenRuta1Model());
     _mapController = MapController();
+
+    // Inicializar el controlador de animación
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(
+          seconds: 60), // Duración de la animación (5 segundos en este caso)
+    );
+
+    // Iniciar la animación
+    _controller.repeat(reverse: false);
   }
 
   void startLocationUpdates() {
@@ -302,6 +316,7 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
   void dispose() {
     stopLocationUpdates();
     _model.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -381,20 +396,26 @@ class _YaenRuta1WidgetState extends State<YaenRuta1Widget> {
                         ),
                         MarkerLayer(
                           markers: [
-                            Marker(
-                              point: mainPosition,
-                              builder: (context) {
-                                return Container(
-                                  child: const Icon(
-                                    Icons.person_pin,
-                                    color: MARKER_COLOR,
-                                    size: 40,
-                                  ),
-                                );
-                              },
-                            )
+                            createCustomMarker(
+                              context,
+                              mainPosition,
+                              AssetImage('assets/images/Usuario.png'),
+                            ),
+                            createAnimatedMarker(
+                              context,
+                              [
+                                latlong.LatLng(4.661459, -74.097073),
+                                latlong.LatLng(4.680851, -74.082577),
+                                latlong.LatLng(4.687693, -74.074042),
+                                latlong.LatLng(4.688526, -74.064131),
+                                latlong.LatLng(4.683488, -74.042486)
+                              ],
+                              AssetImage('assets/images/Lider.png'),
+                              true, // Animar el marcador
+                              _controller, // Controlador de animación
+                            ),
                           ],
-                        )
+                        ),
                       ],
                     ),
                     //PageView Paradas
@@ -975,4 +996,73 @@ class _MapItemDetails extends StatelessWidget {
       ),
     );
   }
+}
+
+Marker createCustomMarker(
+    BuildContext context, latlong.LatLng position, ImageProvider image) {
+  Color color = FlutterFlowTheme.of(context).secondary;
+
+  return Marker(
+    point: position,
+    builder: (context) {
+      return Container(
+        child: Image(
+          image: image,
+          width: 40,
+          height: 40,
+        ),
+      );
+    },
+  );
+}
+
+class LatLngTween extends Tween<latlong.LatLng> {
+  final List<latlong.LatLng> points;
+
+  LatLngTween({required this.points})
+      : super(begin: points.first, end: points.last);
+
+  @override
+  latlong.LatLng lerp(double t) {
+    final int index = ((points.length - 1) * t).floor();
+    final double localT = (points.length - 1) * t - index;
+
+    final latlong.LatLng point1 = points[index];
+    final latlong.LatLng point2 = points[index + 1];
+
+    return latlong.LatLng(
+      lerpDouble(point1.latitude, point2.latitude, localT)!,
+      lerpDouble(point1.longitude, point2.longitude, localT)!,
+    );
+  }
+}
+
+Marker createAnimatedMarker(
+    BuildContext context,
+    List<latlong.LatLng> positions,
+    ImageProvider markerImage,
+    bool animate,
+    AnimationController controller) {
+  final LatLngTween tween = LatLngTween(points: positions);
+
+  return Marker(
+    width: 50.0,
+    height: 50.0,
+    point: tween
+        .animate(controller)
+        .value, // Obtener la posición interpolada basada en el valor de la animación
+    builder: (ctx) {
+      // Si se debe animar el marcador, aplicar la animación
+      if (animate) {
+        return Container(
+          child: Image(image: markerImage), // Imagen del marcador
+        );
+      } else {
+        // Si no se debe animar, simplemente mostrar la imagen del marcador
+        return Container(
+          child: Image(image: markerImage), // Imagen del marcador
+        );
+      }
+    },
+  );
 }
