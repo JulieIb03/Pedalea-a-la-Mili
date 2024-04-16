@@ -40,8 +40,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     try {
       var url = Uri.parse('$currentUrl/login');
 
-      // You can provide data to the server in the 'body' parameter.
-      // Replace 'yourData' with the actual data you want to send.
       Map<String, dynamic> requestData = {
         'email': _model.textController1.text,
         'password': _model.textController2.text
@@ -49,8 +47,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
       http.Response response = await http.post(
         url,
-        body: jsonEncode(requestData), // Encode data as JSON string.
-        headers: {'Content-Type': 'application/json'}, // Set content type.
+        body: jsonEncode(requestData),
+        headers: {'Content-Type': 'application/json'}, 
       );
 
       Map<String, dynamic> responseBody = jsonDecode(response.body);
@@ -372,7 +370,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                 fontFamily: 'Poppins',
                                                 fontWeight: FontWeight.normal,
                                               ),
-                                          keyboardType: TextInputType.visiblePassword,
+                                          keyboardType:
+                                              TextInputType.visiblePassword,
                                           validator: _model
                                               .textController2Validator
                                               .asValidator(context),
@@ -415,9 +414,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                         debugPrint(formResponse.toString());
 
                                         var isValid = await loginReq();
-                                        var memberInfo = isValid["res"][0];
-
+                                        if (!isValid) return;
                                         if (isValid['login']) {
+                                          var memberInfo = isValid["res"][0];
                                           if (memberInfo["roleApp"]
                                                   .toString() ==
                                               "lider") {

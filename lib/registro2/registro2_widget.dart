@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'registro2_model.dart';
 export 'registro2_model.dart';
 import '../registro/registro_widget.dart' show docID;
+import '../home_page/home_page_widget.dart' show loginID;
 import "package:http/http.dart" as http;
 import '../index.dart' show currentUrl;
 
@@ -473,9 +474,11 @@ class _Registro2WidgetState extends State<Registro2Widget> {
 
                                         var isValid =
                                             await userUpdate() as bool;
-                                        if (isValid)
+                                        if (isValid) {
+                                          loginID = docID;
                                           context
                                               .pushNamed('RutasRecomendadas');
+                                        }
                                       },
                                       text: 'Aceptar',
                                       options: FFButtonOptions(
